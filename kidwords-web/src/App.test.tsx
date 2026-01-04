@@ -115,15 +115,25 @@ describe('App', () => {
     expect(screen.getByText(/search for a word/i)).toBeInTheDocument();
   });
 
-  it('should display all words in sidebar initially', () => {
+  it('should display categories in sidebar', () => {
     renderWithChakra(<App />);
     
-    // Check that multiple words are visible
-    // Use getAllByText since words may appear in both sidebar and definition card
-    WORDS.slice(0, 3).forEach(word => {
-      const wordElements = screen.getAllByText(word.word);
-      expect(wordElements.length).toBeGreaterThan(0);
-    });
+    // Should show Categories heading
+    expect(screen.getByText('Categories')).toBeInTheDocument();
+    // Should show "All Words" option (button text includes emoji prefix when selected)
+    expect(screen.getByText(/All Words/)).toBeInTheDocument();
+  });
+
+  it('should display word definition when category is selected', () => {
+    renderWithChakra(<App />);
+    
+    // When a category is selected, the first word from that category should be displayed
+    // The word should appear in the definition card
+    const firstWord = WORDS[0];
+    const wordElements = screen.getAllByText(firstWord.word);
+    expect(wordElements.length).toBeGreaterThan(0);
+    // Verify definition card content is present
+    expect(screen.getByText('What it means')).toBeInTheDocument();
   });
 
   it('should display definition card for selected word', () => {

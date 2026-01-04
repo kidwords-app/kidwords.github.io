@@ -185,4 +185,31 @@ export const WORDS: WordEntry[] = [
       },
     },
   },
+  {
+    word: "moderation",
+    partOfSpeech: "noun",
+    syllables: 4,
+    tags: ["thinking"],
+    cartoonId: "moderation",
+    levels: {
+      preK: {
+        speak: "MOD-uh-RAY-shun",
+        definition: "Doing something a little bit, not too much.",
+        example: "I had one cookie and then stopped.",
+        tryIt: "Choose a snack or a game. Do it a little, then take a break.",
+      },
+      K: {
+        speak: "MOD-uh-RAY-shun",
+        definition: "Doing something not too much and not too little — just enough.",
+        example: "I played on the phone for a bit and then put it away.",
+        tryIt: "Think of something you like. Practice stopping when it feels just right.",
+      },
+      G1: {
+        speak: "MOD-uh-RAY-shun",
+        definition: "Moderation means knowing when to stop so things stay healthy and fun.",
+        example: "I ate some candy, then switched to fruit so I felt good afterward.",
+        tryIt: "Next time you're doing something you enjoy, pause and ask: \"Is this enough for now?\"",
+      },
+    },
+  },
 ];

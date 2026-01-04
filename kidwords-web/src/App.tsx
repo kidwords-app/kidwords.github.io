@@ -5,15 +5,18 @@
 // - UI components live in src/ui-web
 // - Level selection stays the same across word changes (single `level` state)
 
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Box, Grid, VStack } from "@chakra-ui/react";
 
 import { LEVELS, type LevelId, WORDS, type WordEntry } from "./core/words";
 import { filterWords } from "./core/search";
 import { runSelfTests } from "./core/selfTests";
+import type { CategoryId } from "./core/categories";
+import { tagToCategoryId } from "./core/categories";
 
 import { HeaderBar } from "./ui-web/HeaderBar";
-import { Sidebar } from "./ui-web/Sidebar";
+import { CategorySidebar } from "./ui-web/CategorySidebar";
+import { WordList } from "./ui-web/WordList";
 import { DefinitionCard } from "./ui-web/DefinitionCard";
 import { EmptyState } from "./ui-web/EmptyState";
 import { TipsTabs } from "./ui-web/TipsTabs";
@@ -31,12 +34,31 @@ export default function App() {
 
   const [level, setLevel] = useState<LevelId>("K");
   const [query, setQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<CategoryId | null>(null);
   const [pickedWord, setPickedWord] = useState<string>(WORDS[0]?.word ?? "");
 
-  const filtered = useMemo(() => filterWords(WORDS, query), [query]);
+  // Filter words by search query
+  const searchFiltered = useMemo(() => filterWords(WORDS, query), [query]);
+
+  // Filter words by selected category
+  const categoryFiltered = useMemo(() => {
+    if (selectedCategory === null) {
+      return searchFiltered;
+    }
+    return searchFiltered.filter((word) => {
+      return word.tags.some((tag) => tagToCategoryId(tag) === selectedCategory);
+    });
+  }, [searchFiltered, selectedCategory]);
 
   const current: WordEntry | null =
-    filtered.find((w) => w.word === pickedWord) ?? filtered[0] ?? null;
+    categoryFiltered.find((w) => w.word === pickedWord) ?? categoryFiltered[0] ?? null;
+
+  // Reset selected word when category or level changes
+  useEffect(() => {
+    if (categoryFiltered.length > 0 && !categoryFiltered.find((w) => w.word === pickedWord)) {
+      setPickedWord(categoryFiltered[0].word);
+    }
+  }, [categoryFiltered, pickedWord]);
 
   return (
     <Box minH="100dvh" bgGradient="linear(to-b, purple.50, white)">
@@ -55,13 +77,22 @@ export default function App() {
           alignItems="start"
           mt={6}
         >
-          <Sidebar
-            words={filtered}
-            selectedWord={current?.word}
-            onSelectWord={(w) => setPickedWord(w.word)}
-          />
+          <VStack align="stretch" gap={6}>
+            <CategorySidebar
+              words={searchFiltered}
+              selectedCategory={selectedCategory}
+              level={level}
+              onSelectCategory={setSelectedCategory}
+            />
 
-          <VStack align="stretch" spacing={4}>
+            <WordList
+              words={categoryFiltered.slice(0, 10)}
+              selectedWord={current?.word}
+              onSelectWord={(w) => setPickedWord(w.word)}
+            />
+          </VStack>
+
+          <VStack align="stretch" gap={4}>
             {current ? (
               <DefinitionCard word={current} level={level} />
             ) : (
