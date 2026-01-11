@@ -24,7 +24,7 @@ describe('FeedbackButton', () => {
   });
 
   afterEach(() => {
-    window.location = originalLocation;
+    (window as any).location = originalLocation;
     vi.restoreAllMocks();
   });
 
