@@ -20,6 +20,7 @@ import { WordList } from "./ui-web/WordList";
 import { DefinitionCard } from "./ui-web/DefinitionCard";
 import { EmptyState } from "./ui-web/EmptyState";
 import { TipsTabs } from "./ui-web/TipsTabs";
+import { FeedbackButton } from "./ui-web/FeedbackButton";
 
 export default function App() {
   // Run self-tests once in dev
@@ -112,6 +113,7 @@ export default function App() {
           Add PNGs in <code>/public/cartoons/</code> (e.g., empathy.png, happy.png)
         </Box>
       </Box>
+      <FeedbackButton />
     </Box>
   );
 }
