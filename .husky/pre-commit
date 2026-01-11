@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+
+cd "$(dirname -- "$0")/../kidwords-web" || exit
+
+echo "🔍 Running TypeScript type check..."
+npm run typecheck || {
+  echo "❌ TypeScript type check failed. Please fix the errors before committing."
+  exit 1
+}
+
+echo "✅ TypeScript check passed!"
+echo "🧪 Running tests..."
+npm run test:coverage || {
+  echo "❌ Tests failed. Please fix the failing tests before committing."
+  exit 1
+}
+
+echo "✅ All checks passed!"

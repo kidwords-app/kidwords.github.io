@@ -3,13 +3,12 @@ import { runSelfTests } from './selfTests';
 import { WORDS, LEVELS } from './words';
 
 describe('runSelfTests', () => {
-  let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
-  let consoleAssertSpy: ReturnType<typeof vi.spyOn>;
+  let consoleAssertSpy: any;
 
   beforeEach(() => {
     // Mock console.assert to track calls
     consoleAssertSpy = vi.spyOn(console, 'assert').mockImplementation(() => {});
-    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
@@ -25,7 +24,7 @@ describe('runSelfTests', () => {
     
     // Should not have any assertion failures
     const failedAssertions = consoleAssertSpy.mock.calls.filter(
-      call => call[0] === false
+      (call: any[]) => call[0] === false
     );
     expect(failedAssertions.length).toBe(0);
   });
@@ -33,10 +32,6 @@ describe('runSelfTests', () => {
   it('should verify all words have cartoonId', () => {
     runSelfTests();
     
-    // Check that assertions were made for cartoonId
-    const cartoonIdAssertions = consoleAssertSpy.mock.calls.filter(
-      call => typeof call[1] === 'string' && call[1].includes('cartoonId')
-    );
     // Should have at least one assertion checking cartoonId
     expect(consoleAssertSpy).toHaveBeenCalled();
   });
@@ -46,7 +41,7 @@ describe('runSelfTests', () => {
     
     // Check that normalize assertion was made
     const normalizeAssertions = consoleAssertSpy.mock.calls.filter(
-      call => typeof call[1] === 'string' && call[1].includes('normalize')
+      (call: any[]) => typeof call[1] === 'string' && call[1].includes('normalize')
     );
     expect(normalizeAssertions.length).toBeGreaterThan(0);
   });

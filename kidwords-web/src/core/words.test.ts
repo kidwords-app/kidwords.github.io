@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { WORDS, LEVELS, type WordEntry, type LevelId } from './words';
+import { WORDS, LEVELS, type LevelId } from './words';
 
 describe('WORDS data structure', () => {
   it('should have at least one word', () => {

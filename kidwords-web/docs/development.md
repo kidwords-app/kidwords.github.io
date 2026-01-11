@@ -173,10 +173,28 @@ npm install
 npm run dev
 
 # test
-npm run test
+npm run test:coverage
 
 # lint
 npm run lint
 
+# typescript 
+npm run typecheck
+
 # build
 npm run build
+```
+
+## Pre-commit Hooks
+
+This repository uses [Husky](https://typicode.github.io/husky/) to run checks before every commit. The pre-commit hook automatically runs:
+
+1. **TypeScript type checking** (`npm run typecheck`)
+2. **Test suite with coverage** (`npm run test:coverage`)
+
+If either check fails, the commit will be blocked. This ensures that:
+- All TypeScript errors are caught before committing
+- All tests pass before code is committed
+- Code quality is maintained automatically
+
+To bypass the hook in an emergency (not recommended), use `git commit --no-verify`, but this should be avoided.

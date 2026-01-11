@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { normalize, filterWords } from './search';
-import { WORDS, type WordEntry } from './words';
+import { WORDS } from './words';
 
 describe('normalize', () => {
   it('should convert to lowercase', () => {

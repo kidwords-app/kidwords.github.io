@@ -3,7 +3,6 @@ import {
   getCategoriesForLevel,
   getAvailableCategories,
   tagToCategoryId,
-  type CategoryId,
 } from './categories';
 import { WORDS, type LevelId } from './words';
 
