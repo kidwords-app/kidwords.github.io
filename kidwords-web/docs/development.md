@@ -136,7 +136,7 @@ Every fetch-driven screen must include:
 
 ### How to Work in This Repo
 **Always start by reading:**
-- `development.md`
+- `docs/development.md`
 - `docs/product.md` (if present)
 - `docs/quality-bar.md` (if present)
 
