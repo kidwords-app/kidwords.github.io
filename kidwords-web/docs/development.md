@@ -181,8 +181,11 @@ npm run lint
 # typescript 
 npm run typecheck
 
-# build
+# build (for production - no tests, just typecheck and build)
 npm run build
+
+# CI script (runs typecheck, tests, and build - use in CI/CD)
+npm run ci
 ```
 
 ## Pre-commit Hooks
@@ -198,3 +201,9 @@ If either check fails, the commit will be blocked. This ensures that:
 - Code quality is maintained automatically
 
 To bypass the hook in an emergency (not recommended), use `git commit --no-verify`, but this should be avoided.
+
+## Build vs CI
+
+- **`npm run build`**: Used by Vercel and other deployment platforms. Only runs TypeScript type checking and builds the production bundle. Does NOT run tests (UI tests require a browser environment that deployment platforms don't provide).
+- **`npm run ci`**: Full CI pipeline script that runs typecheck, tests, and build. Use this in CI/CD environments that support running tests.
+- **Pre-commit hooks**: Run tests locally before every commit to catch issues early.
