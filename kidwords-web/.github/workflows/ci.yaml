@@ -1,0 +1,61 @@
+name: ci
+
+# Runs only when the publish workflow pushes directly to main (image assets
+# or words-data.json). PR merges skip this — CI already ran on the branch.
+# If CI fails, the commit is auto-reverted so the site never stays broken.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/core/words-data.json"
+      - "public/cartoons/**"
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history needed so the revert step can push cleanly
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run CI checks (typecheck + tests + build)
+        run: npm run ci
+
+      - name: Revert on failure
+        if: failure()
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git revert HEAD --no-edit
+          git push origin main
+
+      - name: Email notification
+        if: always()
+        continue-on-error: true
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_SERVER }}
+          server_port: ${{ secrets.SMTP_PORT }}
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "ci ${{ github.sha_short || github.sha }}: ${{ job.status }}"
+          to: ${{ secrets.NOTIFY_EMAIL_TO }}
+          from: ${{ secrets.NOTIFY_EMAIL_FROM || 'github-actions[bot]@users.noreply.github.com' }}
+          body: |
+            Status:  ${{ job.status }}
+            Commit:  ${{ github.sha }}
+            Message: ${{ github.event.head_commit.message }}
+            Run:     ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
