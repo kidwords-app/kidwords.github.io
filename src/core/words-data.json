@@ -1,0 +1,31 @@
+[
+  {
+    "wordId": "clue",
+    "word": "clue",
+    "partOfSpeech": "noun",
+    "syllables": 1,
+    "tags": [
+      "thinking"
+    ],
+    "imageUrl": "/cartoons/clue.png",
+    "levels": {
+      "preK": {
+        "definition": "A clue is a little sign that helps you find something or guess what's happening.",
+        "example": "We found a red ribbon, and that was a clue to find the hidden treasure!",
+        "tryIt": "When we play hide-and-seek, I can give you a clue to help you find me!"
+      },
+      "K": {
+        "definition": "A clue is a little hint or a piece of information that helps you find something or figure out a secret!",
+        "example": "The muddy paw prints were a clue that our dog had been playing in the garden.",
+        "tryIt": "Next time you can't find your favorite toy, what kind of clue could you look for to help you find it?"
+      },
+      "G1": {
+        "definition": "A clue is a little hint or a piece of information that helps you figure something out, like a mystery or a puzzle!",
+        "example": "The missing cookie crumbs were a big clue about who ate the snack.",
+        "tryIt": "Next time you are playing a game like hide-and-seek, what clue could help you find your friend?"
+      }
+    },
+    "roundId": "2026-04-01",
+    "publishedAt": "2026-04-18T04:55:40.716244+00:00"
+  }
+]
