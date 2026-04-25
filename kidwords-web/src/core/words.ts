@@ -1,3 +1,5 @@
+import wordsData from "./words-data.json" with { type: "json" };
+
 export type LevelId = "preK" | "K" | "G1";
 
 export const LEVELS: { id: LevelId; label: string }[] = [
@@ -22,7 +24,38 @@ export type WordEntry = {
   levels: Record<LevelId, LevelCopy>;
 };
 
-export const WORDS: WordEntry[] = [
+/** Shape of `words-data.json` — moderation tooling can append or replace entries here. */
+export type WordsDataFile = {
+  words: WordEntry[];
+};
+
+/**
+ * Merges the bundled TypeScript word list with entries from `words-data.json`.
+ * Same word (case-insensitive) in the JSON file replaces the TS entry in-place; new words append.
+ */
+export function mergeWordEntries(
+  fromTs: readonly WordEntry[],
+  fromData: readonly WordEntry[]
+): WordEntry[] {
+  const indexByKey = new Map<string, number>();
+  const result: WordEntry[] = [...fromTs];
+  for (let i = 0; i < result.length; i++) {
+    indexByKey.set(result[i].word.toLowerCase(), i);
+  }
+  for (const entry of fromData) {
+    const key = entry.word.toLowerCase();
+    const existing = indexByKey.get(key);
+    if (existing !== undefined) {
+      result[existing] = entry;
+    } else {
+      indexByKey.set(key, result.length);
+      result.push(entry);
+    }
+  }
+  return result;
+}
+
+const WORDS_FROM_TS: WordEntry[] = [
   {
     word: "empathy",
     partOfSpeech: "noun",
@@ -213,3 +246,8 @@ export const WORDS: WordEntry[] = [
     },
   },
 ];
+
+const data = wordsData as WordsDataFile;
+
+/** Merged vocabulary: bundled list plus moderated rows from `words-data.json`. */
+export const WORDS: WordEntry[] = mergeWordEntries(WORDS_FROM_TS, data.words);

@@ -1,5 +1,43 @@
 import { describe, it, expect } from 'vitest';
-import { WORDS, LEVELS, type LevelId } from './words';
+import {
+  WORDS,
+  LEVELS,
+  mergeWordEntries,
+  type LevelId,
+  type WordEntry,
+} from './words';
+
+const minimalEntry = (word: string): WordEntry => ({
+  word,
+  partOfSpeech: "noun",
+  syllables: 1,
+  tags: ["test"],
+  cartoonId: word,
+  levels: {
+    preK: { speak: "a", definition: "b", example: "c", tryIt: "d" },
+    K: { speak: "a", definition: "b", example: "c", tryIt: "d" },
+    G1: { speak: "a", definition: "b", example: "c", tryIt: "d" },
+  },
+});
+
+describe('mergeWordEntries', () => {
+  it('replaces TS entry when JSON has same word (case-insensitive)', () => {
+    const base: WordEntry[] = [minimalEntry("alpha"), minimalEntry("beta")];
+    const fromData: WordEntry[] = [
+      { ...minimalEntry("ALPHA"), syllables: 9 },
+    ];
+    const merged = mergeWordEntries(base, fromData);
+    expect(merged).toHaveLength(2);
+    expect(merged[0].syllables).toBe(9);
+    expect(merged[1].word).toBe("beta");
+  });
+
+  it('appends words only present in JSON', () => {
+    const base: WordEntry[] = [minimalEntry("one")];
+    const merged = mergeWordEntries(base, [minimalEntry("two")]);
+    expect(merged.map((w) => w.word)).toEqual(["one", "two"]);
+  });
+});
 
 describe('WORDS data structure', () => {
   it('should have at least one word', () => {
