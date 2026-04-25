@@ -102,16 +102,6 @@ export default function App() {
             <TipsTabs />
           </VStack>
         </Grid>
-
-        <Box
-          as="footer"
-          pt={4}
-          textAlign="center"
-          fontSize="xs"
-          color="gray.600"
-        >
-          Add PNGs in <code>/public/cartoons/</code> (e.g., empathy.png, happy.png)
-        </Box>
       </Box>
       <FeedbackButton />
     </Box>
