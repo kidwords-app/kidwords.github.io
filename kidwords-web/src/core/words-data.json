@@ -1,3 +1,30 @@
 {
-  "words": []
+  "words": [
+    {
+      "word": "disappointment",
+      "partOfSpeech": "noun",
+      "syllables": 4,
+      "tags": [
+        "thinking"
+      ],
+      "cartoonId": "disappointment",
+      "levels": {
+        "preK": {
+          "definition": "It's a little sad feeling you get when something you hoped for doesn't happen.",
+          "example": "I felt a little disappointment when my friend couldn't come over to play today.",
+          "tryIt": "What might make you feel a little disappointment?"
+        },
+        "K": {
+          "definition": "It's when you feel a little sad because something you really hoped for didn't happen the way you wanted.",
+          "example": "Lily felt **disappointment** when her balloon popped before she could show it to her friends.",
+          "tryIt": "Think of a time you were really hoping for a sunny day to play outside, but it rained instead. That's a feeling of disappointment!"
+        },
+        "G1": {
+          "definition": "It's a sad feeling you get when something you hoped for or really wanted to happen doesn't happen.",
+          "example": "I felt disappointment when it started to rain and we couldn't go to the park.",
+          "tryIt": "What would make you feel disappointment? Maybe if your friend couldn't come over to play?"
+        }
+      }
+    }
+  ]
 }
