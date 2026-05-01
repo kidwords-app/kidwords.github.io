@@ -25,6 +25,32 @@
           "tryIt": "What would make you feel disappointment? Maybe if your friend couldn't come over to play?"
         }
       }
+    },
+    {
+      "word": "safety",
+      "partOfSpeech": "noun",
+      "syllables": 2,
+      "tags": [
+        "thinking"
+      ],
+      "cartoonId": "safety",
+      "levels": {
+        "preK": {
+          "definition": "Safety means being careful so you don't get hurt. Like wearing your helmet!",
+          "example": "Wearing a helmet helps keep you safe when you ride your scooter or tricycle.",
+          "tryIt": "What helps keep the child's head safe when they ride the scooter?"
+        },
+        "K": {
+          "definition": "Safety means staying safe and not getting hurt. Wearing your helmet helps with safety!",
+          "example": "Putting on a helmet before riding the scooter is good safety.",
+          "tryIt": "Why do you think the child is wearing a helmet?"
+        },
+        "G1": {
+          "definition": "Safety means being careful so you don't get hurt, like wearing your helmet.",
+          "example": "The child puts on their helmet for safety before riding the scooter.",
+          "tryIt": "Why do you think wearing a helmet is a safe thing to do when riding a scooter or tricycle?"
+        }
+      }
     }
   ]
 }
