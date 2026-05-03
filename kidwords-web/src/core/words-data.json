@@ -10,16 +10,19 @@
       "cartoonId": "disappointment",
       "levels": {
         "preK": {
+          "speak": "dis-uh-POINT-mint",
           "definition": "It's a little sad feeling you get when something you hoped for doesn't happen.",
           "example": "I felt a little disappointment when my friend couldn't come over to play today.",
           "tryIt": "What might make you feel a little disappointment?"
         },
         "K": {
+          "speak": "dis-uh-POINT-mint",
           "definition": "It's when you feel a little sad because something you really hoped for didn't happen the way you wanted.",
           "example": "Lily felt **disappointment** when her balloon popped before she could show it to her friends.",
           "tryIt": "Think of a time you were really hoping for a sunny day to play outside, but it rained instead. That's a feeling of disappointment!"
         },
         "G1": {
+          "speak": "dis-uh-POINT-mint",
           "definition": "It's a sad feeling you get when something you hoped for or really wanted to happen doesn't happen.",
           "example": "I felt disappointment when it started to rain and we couldn't go to the park.",
           "tryIt": "What would make you feel disappointment? Maybe if your friend couldn't come over to play?"
@@ -36,16 +39,19 @@
       "cartoonId": "responsibility",
       "levels": {
         "preK": {
+          "speak": "ri-spawn-suh-BIL-uh-tee",
           "definition": "Responsibility is when you take care of something important, like putting your toys in the bin.",
           "example": "The child shows responsibility by gently placing their teddy bear back in the toy bin.",
           "tryIt": "What toy can you show responsibility for by putting it in your toy bin?"
         },
         "K": {
+          "speak": "ri-spawn-suh-BIL-uh-tee",
           "definition": "Responsibility means it's your job to take care of things, like putting your toys in their bin.",
           "example": "When you gently put your favorite toy into the bin, you are showing responsibility for your things.",
           "tryIt": "What is a responsibility you have with your toys?"
         },
         "G1": {
+          "speak": "ri-spawn-suh-BIL-uh-tee",
           "definition": "Responsibility is when you do what you are supposed to do, like putting your toys in the bin.",
           "example": "Putting your teddy bear neatly in the toy bin shows great responsibility.",
           "tryIt": "What is a responsibility you have for your toys at home?"
@@ -62,16 +68,19 @@
       "cartoonId": "safety",
       "levels": {
         "preK": {
+          "speak": "SAYF-tee",
           "definition": "Safety means being careful so you don't get hurt. Like wearing your helmet!",
           "example": "Wearing a helmet helps keep you safe when you ride your scooter or tricycle.",
           "tryIt": "What helps keep the child's head safe when they ride the scooter?"
         },
         "K": {
+          "speak": "SAYF-tee",
           "definition": "Safety means staying safe and not getting hurt. Wearing your helmet helps with safety!",
           "example": "Putting on a helmet before riding the scooter is good safety.",
           "tryIt": "Why do you think the child is wearing a helmet?"
         },
         "G1": {
+          "speak": "SAYF-tee",
           "definition": "Safety means being careful so you don't get hurt, like wearing your helmet.",
           "example": "The child puts on their helmet for safety before riding the scooter.",
           "tryIt": "Why do you think wearing a helmet is a safe thing to do when riding a scooter or tricycle?"
