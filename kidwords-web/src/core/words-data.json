@@ -30,6 +30,32 @@
       }
     },
     {
+      "word": "dream",
+      "partOfSpeech": "noun",
+      "syllables": 1,
+      "tags": [
+        "thinking"
+      ],
+      "cartoonId": "dream",
+      "levels": {
+        "preK": {
+          "definition": "A dream is like pictures you see in your head when you are sleeping.",
+          "example": "The child is having a happy dream about a fluffy bunny playing gently with a colorful ball.",
+          "tryIt": "What do you like to dream about when you are sleeping?"
+        },
+        "K": {
+          "definition": "A dream is like a fun picture or story you see in your head when you are sleeping, just like the bunny playing above the child's head!",
+          "example": "The child is having a happy dream about a fluffy bunny playing with a colorful ball.",
+          "tryIt": "Can you point to the fluffy bunny that is part of the child's dream?"
+        },
+        "G1": {
+          "definition": "A dream is like a picture story you see in your head when you are sleeping, just like the bunny playing above the child.",
+          "example": "The sleeping child is having a happy dream about a fluffy bunny playing with a colorful ball.",
+          "tryIt": "What do you think the friendly bunny in the child's dream will do next?"
+        }
+      }
+    },
+    {
       "word": "responsibility",
       "partOfSpeech": "noun",
       "syllables": 6,
