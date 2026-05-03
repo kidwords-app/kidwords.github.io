@@ -27,6 +27,32 @@
       }
     },
     {
+      "word": "responsibility",
+      "partOfSpeech": "noun",
+      "syllables": 6,
+      "tags": [
+        "thinking"
+      ],
+      "cartoonId": "responsibility",
+      "levels": {
+        "preK": {
+          "definition": "Responsibility is when you take care of something important, like putting your toys in the bin.",
+          "example": "The child shows responsibility by gently placing their teddy bear back in the toy bin.",
+          "tryIt": "What toy can you show responsibility for by putting it in your toy bin?"
+        },
+        "K": {
+          "definition": "Responsibility means it's your job to take care of things, like putting your toys in their bin.",
+          "example": "When you gently put your favorite toy into the bin, you are showing responsibility for your things.",
+          "tryIt": "What is a responsibility you have with your toys?"
+        },
+        "G1": {
+          "definition": "Responsibility is when you do what you are supposed to do, like putting your toys in the bin.",
+          "example": "Putting your teddy bear neatly in the toy bin shows great responsibility.",
+          "tryIt": "What is a responsibility you have for your toys at home?"
+        }
+      }
+    },
+    {
       "word": "safety",
       "partOfSpeech": "noun",
       "syllables": 2,
