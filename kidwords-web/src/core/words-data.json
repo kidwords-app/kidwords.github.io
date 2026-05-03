@@ -56,6 +56,32 @@
       }
     },
     {
+      "word": "mystery",
+      "partOfSpeech": "noun",
+      "syllables": 3,
+      "tags": [
+        "thinking"
+      ],
+      "cartoonId": "mystery",
+      "levels": {
+        "preK": {
+          "definition": "A mystery is when you don't know who did something, like who ate the cookie!",
+          "example": "The child in the kitchen is trying to solve the mystery of the missing cookie.",
+          "tryIt": "Look at the picture! Can you help solve the mystery? Who do you think ate the yummy cookie?"
+        },
+        "K": {
+          "definition": "A mystery is something you don't know the answer to, like who ate the cookie!",
+          "example": "The child looked at the half-eaten cookie and thought, 'It's a mystery who ate it!'",
+          "tryIt": "Look at the picture! Can you guess who might know the secret about the missing cookie?"
+        },
+        "G1": {
+          "definition": "A mystery is a puzzle, like when you don't know who ate the cookie!",
+          "example": "The child looked at the half-eaten cookie, and it was a big mystery who took a bite!",
+          "tryIt": "Look at the picture. Can you guess who ate the cookie? You're trying to solve the mystery!"
+        }
+      }
+    },
+    {
       "word": "responsibility",
       "partOfSpeech": "noun",
       "syllables": 6,
