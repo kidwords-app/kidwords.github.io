@@ -56,6 +56,32 @@
       }
     },
     {
+      "word": "impressive",
+      "partOfSpeech": "adjective",
+      "syllables": 3,
+      "tags": [
+        "thinking"
+      ],
+      "cartoonId": "impressive",
+      "levels": {
+        "preK": {
+          "definition": "Impressive means something is really, really good and makes you say 'Wow!' like that super tall block tower!",
+          "example": "The friendly bunny thinks your tall block tower is very impressive!",
+          "tryIt": "Can you make an 'impressive' face like the bunny looking at the tower?"
+        },
+        "K": {
+          "definition": "Impressive means something is so good or big it makes you say 'Wow!' just like that super tall block tower.",
+          "example": "Look! The squirrel thinks your tall block tower is so impressive!",
+          "tryIt": "Can you point to something else in this picture that looks impressive?"
+        },
+        "G1": {
+          "definition": "Impressive means something is so good or big that it makes you say, \"Wow!\" Just like the tall block tower!",
+          "example": "The tall block tower was so impressive that the rabbit looked up with wide, happy eyes.",
+          "tryIt": "What makes the tall block tower look so impressive?"
+        }
+      }
+    },
+    {
       "word": "mystery",
       "partOfSpeech": "noun",
       "syllables": 3,
