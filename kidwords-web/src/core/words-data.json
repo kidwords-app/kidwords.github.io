@@ -82,6 +82,32 @@
       }
     },
     {
+      "word": "respect",
+      "partOfSpeech": "noun",
+      "syllables": 2,
+      "tags": [
+        "thinking"
+      ],
+      "cartoonId": "respect",
+      "levels": {
+        "preK": {
+          "definition": "Respect means being kind and careful with something important, like your plant.",
+          "example": "The child shows respect for the plant by carefully pouring water, helping it grow.",
+          "tryIt": "How is the child in the picture showing respect for the plant?"
+        },
+        "K": {
+          "definition": "Respect means you are kind and careful with something, like when you water your plant so it can grow.",
+          "example": "The child shows respect for the little plant by gently giving it water.",
+          "tryIt": "If you had a little plant, how would you water it gently to show respect?"
+        },
+        "G1": {
+          "definition": "Respect means showing you care about something or someone. Like when you carefully water a plant.",
+          "example": "The child shows respect by gently pouring water so the little plant can drink.",
+          "tryIt": "What is something at your home that you can show respect to, just like you show respect to the plant?"
+        }
+      }
+    },
+    {
       "word": "responsibility",
       "partOfSpeech": "noun",
       "syllables": 6,
