@@ -13,6 +13,8 @@ export type LevelCopy = {
   definition: string;
   example: string;
   tryIt: string;
+  /** Resolved S3/CDN URL when loaded from RDS; omitted for bundled words. */
+  imageUrl?: string;
 };
 
 export type WordEntry = {
@@ -20,8 +22,10 @@ export type WordEntry = {
   partOfSpeech: string;
   syllables: number;
   tags: string[];
-  cartoonId: string; // e.g. "empathy" -> web: /cartoons/empathy.png, native: imageMap.empathy
+  cartoonId: string; // bundled: /cartoons/{cartoonId}.png
   levels: Record<LevelId, LevelCopy>;
+  /** When true, replace this word from RDS via /api/words (connectivity testing). */
+  dbFetch?: boolean;
 };
 
 /** Shape of `words-data.json` — moderation tooling can append or replace entries here. */
@@ -55,6 +59,25 @@ export function mergeWordEntries(
   return result;
 }
 
+/** Overlay RDS rows onto bundled words marked with `dbFetch: true`. */
+export function applyDbWords(bundled: readonly WordEntry[], fromDb: readonly WordEntry[]): WordEntry[] {
+  const dbByKey = new Map(fromDb.map((w) => [w.word.toLowerCase(), w]));
+  return bundled.map((entry) => {
+    if (!entry.dbFetch) {
+      return entry;
+    }
+    const fromDbEntry = dbByKey.get(entry.word.toLowerCase());
+    if (!fromDbEntry) {
+      return entry;
+    }
+    return { ...fromDbEntry, dbFetch: true };
+  });
+}
+
+export function wordsMarkedForDbFetch(words: readonly WordEntry[]): WordEntry[] {
+  return words.filter((w) => w.dbFetch);
+}
+
 const WORDS_FROM_TS: WordEntry[] = [
   {
     word: "empathy",
@@ -62,6 +85,7 @@ const WORDS_FROM_TS: WordEntry[] = [
     syllables: 3,
     tags: ["feelings"],
     cartoonId: "empathy",
+    dbFetch: true,
     levels: {
       preK: {
         speak: "EM-puh-thee",
@@ -89,6 +113,7 @@ const WORDS_FROM_TS: WordEntry[] = [
     syllables: 2,
     tags: ["feelings"],
     cartoonId: "happy",
+    dbFetch: false,
     levels: {
       preK: {
         speak: "HAP-ee",
@@ -116,6 +141,7 @@ const WORDS_FROM_TS: WordEntry[] = [
     syllables: 2,
     tags: ["space"],
     cartoonId: "rocket",
+    dbFetch: false,
     levels: {
       preK: {
         speak: "ROK-it",
@@ -143,6 +169,7 @@ const WORDS_FROM_TS: WordEntry[] = [
     syllables: 3,
     tags: ["describing"],
     cartoonId: "marvelous",
+    dbFetch: false,
     levels: {
       preK: {
         speak: "MAR-vuh-luss",
@@ -170,6 +197,7 @@ const WORDS_FROM_TS: WordEntry[] = [
     syllables: 4,
     tags: ["actions"],
     cartoonId: "consolidate",
+    dbFetch: false,
     levels: {
       preK: {
         speak: "kun-SOL-ih-date",
@@ -197,6 +225,7 @@ const WORDS_FROM_TS: WordEntry[] = [
     syllables: 2,
     tags: ["toys"],
     cartoonId: "puzzle",
+    dbFetch: false,
     levels: {
       preK: {
         speak: "PUH-zuhl",
@@ -224,6 +253,7 @@ const WORDS_FROM_TS: WordEntry[] = [
     syllables: 4,
     tags: ["thinking"],
     cartoonId: "moderation",
+    dbFetch: false,
     levels: {
       preK: {
         speak: "MOD-uh-RAY-shun",

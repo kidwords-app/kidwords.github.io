@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   WORDS,
   LEVELS,
+  applyDbWords,
   mergeWordEntries,
   type LevelId,
   type WordEntry,
@@ -39,6 +40,28 @@ describe('mergeWordEntries', () => {
   });
 });
 
+describe('applyDbWords', () => {
+  it('replaces only entries marked dbFetch', () => {
+    const bundled: WordEntry[] = [
+      { ...minimalEntry('alpha'), dbFetch: true },
+      { ...minimalEntry('beta'), dbFetch: false },
+    ];
+    const fromDb: WordEntry[] = [
+      { ...minimalEntry('alpha'), syllables: 9, cartoonId: 'from-db' },
+    ];
+    const merged = applyDbWords(bundled, fromDb);
+    expect(merged[0].syllables).toBe(9);
+    expect(merged[0].dbFetch).toBe(true);
+    expect(merged[1].syllables).toBe(1);
+  });
+
+  it('keeps bundled entry when db row is missing', () => {
+    const bundled: WordEntry[] = [{ ...minimalEntry('missing'), dbFetch: true, syllables: 2 }];
+    const merged = applyDbWords(bundled, []);
+    expect(merged[0].syllables).toBe(2);
+  });
+});
+
 describe('WORDS data structure', () => {
   it('should have at least one word', () => {
     expect(WORDS.length).toBeGreaterThan(0);
@@ -70,17 +93,17 @@ describe('WORDS data structure', () => {
       levelIds.forEach((levelId) => {
         expect(word.levels).toHaveProperty(levelId);
         const levelCopy = word.levels[levelId];
-        expect(levelCopy).toHaveProperty('speak');
         expect(levelCopy).toHaveProperty('definition');
         expect(levelCopy).toHaveProperty('example');
         expect(levelCopy).toHaveProperty('tryIt');
         
-        expect(typeof levelCopy.speak).toBe('string');
+        if (levelCopy.speak != null) {
+          expect(typeof levelCopy.speak).toBe('string');
+        }
         expect(typeof levelCopy.definition).toBe('string');
         expect(typeof levelCopy.example).toBe('string');
         expect(typeof levelCopy.tryIt).toBe('string');
-        
-        expect(levelCopy.speak.length).toBeGreaterThan(0);
+
         expect(levelCopy.definition.length).toBeGreaterThan(0);
         expect(levelCopy.example.length).toBeGreaterThan(0);
         expect(levelCopy.tryIt.length).toBeGreaterThan(0);

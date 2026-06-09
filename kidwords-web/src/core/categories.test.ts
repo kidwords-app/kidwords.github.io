@@ -4,7 +4,8 @@ import {
   getAvailableCategories,
   tagToCategoryId,
 } from './categories';
-import { WORDS, type LevelId } from './words';
+import type { LevelId } from './words';
+import { TEST_WORDS } from '../test/fixtures/test-words';
 
 describe('categories', () => {
   describe('getCategoriesForLevel', () => {
@@ -89,7 +90,7 @@ describe('categories', () => {
 
   describe('getAvailableCategories', () => {
     it('should return categories that have words', () => {
-      const available = getAvailableCategories(WORDS, 'K');
+      const available = getAvailableCategories(TEST_WORDS, 'K');
       expect(available.length).toBeGreaterThan(0);
       expect(available).toContain('feelings');
       expect(available).toContain('describing');
@@ -101,7 +102,7 @@ describe('categories', () => {
     });
 
     it('should only return categories that actually have words', () => {
-      const wordsWithFeelings = WORDS.filter((w) => w.tags.includes('feelings'));
+      const wordsWithFeelings = TEST_WORDS.filter((w) => w.tags.includes('feelings'));
       const available = getAvailableCategories(wordsWithFeelings, 'K');
       expect(available).toContain('feelings');
       // Should not contain categories that don't have words
@@ -111,7 +112,7 @@ describe('categories', () => {
     it('should work for all levels', () => {
       const levels: LevelId[] = ['preK', 'K', 'G1'];
       levels.forEach((level) => {
-        const available = getAvailableCategories(WORDS, level);
+        const available = getAvailableCategories(TEST_WORDS, level);
         expect(Array.isArray(available)).toBe(true);
         expect(available.length).toBeGreaterThan(0);
       });

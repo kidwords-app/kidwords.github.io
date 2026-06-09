@@ -17,10 +17,13 @@
     "create-spec": "node scripts/create-spec.js"
   },
   "dependencies": {
+    "@aws-sdk/rds-signer": "^3.1057.0",
     "@chakra-ui/react": "^3.30.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@vercel/oidc-aws-credentials-provider": "^3.1.2",
     "framer-motion": "^12.23.26",
+    "pg": "^8.21.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
@@ -30,8 +33,10 @@
     "@testing-library/react": "^14.1.2",
     "@testing-library/user-event": "^14.5.1",
     "@types/node": "^24.10.1",
+    "@types/pg": "^8.20.0",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
+    "@vercel/node": "^5.8.8",
     "@vitejs/plugin-react": "^5.1.1",
     "@vitest/coverage-v8": "^1.0.4",
     "@vitest/ui": "^1.0.4",
