@@ -1,5 +1,5 @@
-import type { LevelCopy, LevelId, WordEntry } from "../src/core/words";
-import { getPool } from "./db";
+import type { LevelCopy, LevelId, WordEntry } from "../src/core/words.js";
+import { getPool } from "./db.js";
 
 const LEVEL_IDS: LevelId[] = ["preK", "K", "G1"];
 
