@@ -17,7 +17,7 @@ describe('fetchWords', () => {
     );
 
     await expect(fetchWords()).resolves.toEqual(payload);
-    expect(fetch).toHaveBeenCalledWith('/api/words');
+    expect(fetch).toHaveBeenCalledWith('/api/words', { cache: 'no-store' });
   });
 
   it('throws when the API response is not ok', async () => {

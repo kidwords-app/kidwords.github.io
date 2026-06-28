@@ -92,9 +92,9 @@ function rowsToWordEntries(rows: WordRow[]): WordEntry[] {
 
     bucket.levels[levelId] = {
       speak: row.speak ?? "",
-      definition: row.definition,
-      example: row.example,
-      tryIt: row.try_it,
+      definition: row.definition ?? "",
+      example: row.example ?? "",
+      tryIt: row.try_it ?? "",
       // imageUrl left unset until S3/CDN base URL is configured
     };
   }

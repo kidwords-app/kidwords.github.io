@@ -61,7 +61,7 @@ export function mergeWordEntries(
 
 /** True when RDS returned copy for this grade (non-empty definition). */
 function levelHasDbContent(level: LevelCopy): boolean {
-  return level.definition.trim().length > 0;
+  return (level.definition ?? "").trim().length > 0;
 }
 
 function mergeWordFromDb(
