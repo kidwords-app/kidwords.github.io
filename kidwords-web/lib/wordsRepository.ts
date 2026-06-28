@@ -1,5 +1,5 @@
 import type { LevelCopy, LevelId, WordEntry } from "../src/core/words";
-import { pool } from "./db";
+import { getPool } from "./db";
 
 const LEVEL_IDS: LevelId[] = ["preK", "K", "G1"];
 
@@ -124,7 +124,7 @@ function rowsToWordEntries(rows: WordRow[]): WordEntry[] {
 /** Loads vocabulary from RDS (`public.words` by default). */
 export async function fetchWordsFromRds(): Promise<WordEntry[]> {
   const table = wordsTable();
-  const { rows } = await pool.query<WordRow>(
+  const { rows } = await getPool().query<WordRow>(
     `SELECT word, grade::text AS grade, definition, example, try_it, speak, tags,
             image_s3_key, part_of_speech, syllables
      FROM ${table}

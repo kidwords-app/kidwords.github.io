@@ -22,6 +22,7 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@vercel/oidc-aws-credentials-provider": "^3.1.2",
+    "dotenv": "^17.4.2",
     "framer-motion": "^12.23.26",
     "pg": "^8.21.0",
     "react": "^19.2.0",

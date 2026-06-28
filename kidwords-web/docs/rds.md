@@ -1,4 +1,6 @@
-# Kidwords App 
+# Kidwords App — RDS schema
+
+For local env vars and `vercel dev` testing, see [local-dev.md](./local-dev.md).
 
 postgres=> \d+ words
                                                        Table "public.words"

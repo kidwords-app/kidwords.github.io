@@ -1,6 +1,12 @@
+import { config as loadEnv } from "dotenv";
+import { resolve } from "node:path";
 import { awsCredentialsProvider } from "@vercel/oidc-aws-credentials-provider";
 import { Signer } from "@aws-sdk/rds-signer";
 import { Pool } from "pg";
+
+// Vite reloads on .env.local changes; API routes run in a separate process and
+// need an explicit load (and a full `vercel dev` restart after `vercel env pull`).
+loadEnv({ path: resolve(process.cwd(), ".env.local") });
 
 function requireEnv(name: string): string {
   const value = process.env[name];
@@ -10,35 +16,39 @@ function requireEnv(name: string): string {
   return value;
 }
 
-const RDS_PORT = parseInt(requireEnv("RDS_PORT"), 10);
-const RDS_HOSTNAME = requireEnv("RDS_HOSTNAME");
-const RDS_DATABASE = requireEnv("RDS_DATABASE");
-const RDS_USERNAME = requireEnv("RDS_USERNAME");
-const AWS_REGION = requireEnv("AWS_REGION");
-const AWS_ROLE_ARN = requireEnv("AWS_ROLE_ARN");
-
-const signer = new Signer({
-  credentials: awsCredentialsProvider({ roleArn: AWS_ROLE_ARN }),
-  region: AWS_REGION,
-  port: RDS_PORT,
-  hostname: RDS_HOSTNAME,
-  username: RDS_USERNAME,
-});
-
 const globalForPool = globalThis as typeof globalThis & { __kidwordsPgPool?: Pool };
 
-export const pool: Pool =
-  globalForPool.__kidwordsPgPool ??
-  new Pool({
+function createPool(): Pool {
+  const rdsPort = parseInt(requireEnv("RDS_PORT"), 10);
+  const rdsHostname = requireEnv("RDS_HOSTNAME");
+  const rdsDatabase = requireEnv("RDS_DATABASE");
+  const rdsUsername = requireEnv("RDS_USERNAME");
+  const awsRegion = requireEnv("AWS_REGION");
+  const awsRoleArn = requireEnv("AWS_ROLE_ARN");
+
+  const signer = new Signer({
+    credentials: awsCredentialsProvider({ roleArn: awsRoleArn }),
+    region: awsRegion,
+    port: rdsPort,
+    hostname: rdsHostname,
+    username: rdsUsername,
+  });
+
+  return new Pool({
     password: signer.getAuthToken.bind(signer),
-    user: RDS_USERNAME,
-    host: RDS_HOSTNAME,
-    database: RDS_DATABASE,
-    port: RDS_PORT,
+    user: rdsUsername,
+    host: rdsHostname,
+    database: rdsDatabase,
+    port: rdsPort,
     max: 1,
     ssl: process.env.RDS_SSL === "false" ? undefined : { rejectUnauthorized: false },
   });
+}
 
-if (process.env.NODE_ENV !== "production") {
-  globalForPool.__kidwordsPgPool = pool;
+/** Lazy pool — env vars are read on first query, not at module import. */
+export function getPool(): Pool {
+  if (!globalForPool.__kidwordsPgPool) {
+    globalForPool.__kidwordsPgPool = createPool();
+  }
+  return globalForPool.__kidwordsPgPool;
 }

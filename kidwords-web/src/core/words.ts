@@ -113,7 +113,7 @@ const WORDS_FROM_TS: WordEntry[] = [
     syllables: 2,
     tags: ["feelings"],
     cartoonId: "happy",
-    dbFetch: false,
+    dbFetch: true,
     levels: {
       preK: {
         speak: "HAP-ee",
