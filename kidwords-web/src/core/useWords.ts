@@ -34,8 +34,6 @@ export function useWords(): WordsState {
         if (!cancelled) {
           const message = err instanceof Error ? err.message : "Failed to load words from database";
           setDbError(message);
-          // eslint-disable-next-line no-console
-          console.warn("[KidWords] RDS overlay failed; using bundled copy for dbFetch words.", message);
         }
       })
       .finally(() => {

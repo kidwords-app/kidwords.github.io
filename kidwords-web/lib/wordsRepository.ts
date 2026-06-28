@@ -1,5 +1,6 @@
 import type { LevelCopy, LevelId, WordEntry } from "../src/core/words.js";
 import { getPool } from "./db.js";
+import { logRds } from "./logger.js";
 
 const LEVEL_IDS: LevelId[] = ["preK", "K", "G1"];
 
@@ -124,11 +125,26 @@ function rowsToWordEntries(rows: WordRow[]): WordEntry[] {
 /** Loads vocabulary from RDS (`public.words` by default). */
 export async function fetchWordsFromRds(): Promise<WordEntry[]> {
   const table = wordsTable();
+  const queryStarted = Date.now();
+  logRds("query.start", { table });
+
   const { rows } = await getPool().query<WordRow>(
     `SELECT word, grade::text AS grade, definition, example, try_it, speak, tags,
             image_s3_key, part_of_speech, syllables
      FROM ${table}
      ORDER BY word, grade`
   );
-  return rowsToWordEntries(rows);
+
+  const entries = rowsToWordEntries(rows);
+  const skippedGrades = rows.length - rows.filter((row) => gradeToLevelId(row.grade) !== null).length;
+
+  logRds("query.success", {
+    table,
+    rowCount: rows.length,
+    wordCount: entries.length,
+    skippedUnmappedGrades: skippedGrades,
+    durationMs: Date.now() - queryStarted,
+  });
+
+  return entries;
 }
