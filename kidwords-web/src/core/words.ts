@@ -59,18 +59,60 @@ export function mergeWordEntries(
   return result;
 }
 
+/** True when RDS returned copy for this grade (non-empty definition). */
+function levelHasDbContent(level: LevelCopy): boolean {
+  return level.definition.trim().length > 0;
+}
+
+function mergeWordFromDb(
+  bundled: WordEntry,
+  fromDb: WordEntry
+): { entry: WordEntry; dbLevels: LevelId[] } {
+  const dbLevels: LevelId[] = [];
+  const levels = {} as Record<LevelId, LevelCopy>;
+
+  for (const levelId of LEVELS.map((l) => l.id)) {
+    if (levelHasDbContent(fromDb.levels[levelId])) {
+      levels[levelId] = fromDb.levels[levelId];
+      dbLevels.push(levelId);
+    } else {
+      levels[levelId] = bundled.levels[levelId];
+    }
+  }
+
+  const entry: WordEntry = {
+    ...bundled,
+    partOfSpeech: dbLevels.length > 0 ? fromDb.partOfSpeech : bundled.partOfSpeech,
+    syllables: dbLevels.length > 0 ? fromDb.syllables : bundled.syllables,
+    tags: dbLevels.length > 0 && fromDb.tags.length > 0 ? fromDb.tags : bundled.tags,
+    cartoonId: fromDb.cartoonId || bundled.cartoonId,
+    levels,
+    dbFetch: true,
+  };
+
+  return { entry, dbLevels };
+}
+
 /** Overlay RDS rows onto bundled words marked with `dbFetch: true`. */
 export function applyDbWords(bundled: readonly WordEntry[], fromDb: readonly WordEntry[]): WordEntry[] {
   const dbByKey = new Map(fromDb.map((w) => [w.word.toLowerCase(), w]));
+
   return bundled.map((entry) => {
     if (!entry.dbFetch) {
       return entry;
     }
+
     const fromDbEntry = dbByKey.get(entry.word.toLowerCase());
     if (!fromDbEntry) {
       return entry;
     }
-    return { ...fromDbEntry, dbFetch: true };
+
+    const { entry: merged, dbLevels } = mergeWordFromDb(entry, fromDbEntry);
+    if (dbLevels.length === 0) {
+      return entry;
+    }
+
+    return merged;
   });
 }
 

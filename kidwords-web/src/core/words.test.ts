@@ -60,6 +60,36 @@ describe('applyDbWords', () => {
     const merged = applyDbWords(bundled, []);
     expect(merged[0].syllables).toBe(2);
   });
+
+  it('uses bundled levels for grades missing in db', () => {
+    const bundled: WordEntry[] = [
+      {
+        ...minimalEntry('happy'),
+        dbFetch: true,
+        levels: {
+          preK: { speak: 'b-preK', definition: 'bundled preK', example: 'x', tryIt: 'y' },
+          K: { speak: 'b-K', definition: 'bundled K', example: 'x', tryIt: 'y' },
+          G1: { speak: 'b-G1', definition: 'bundled G1', example: 'x', tryIt: 'y' },
+        },
+      },
+    ];
+    const fromDb: WordEntry[] = [
+      {
+        ...minimalEntry('happy'),
+        syllables: 9,
+        levels: {
+          preK: { speak: 'db', definition: 'from db preK', example: 'x', tryIt: 'y' },
+          K: { speak: '', definition: '', example: '', tryIt: '' },
+          G1: { speak: '', definition: '', example: '', tryIt: '' },
+        },
+      },
+    ];
+    const merged = applyDbWords(bundled, fromDb);
+    expect(merged[0].levels.preK.definition).toBe('from db preK');
+    expect(merged[0].levels.K.definition).toBe('bundled K');
+    expect(merged[0].levels.G1.definition).toBe('bundled G1');
+    expect(merged[0].syllables).toBe(9);
+  });
 });
 
 describe('WORDS data structure', () => {
