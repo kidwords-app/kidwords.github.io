@@ -9,6 +9,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Box, Grid, VStack } from "@chakra-ui/react";
 
 import { LEVELS, WORDS, type LevelId, type WordEntry } from "./core/words";
+import { isFeedbackEligible } from "./core/feedback";
 import { useWords } from "./core/useWords";
 import { filterWords } from "./core/search";
 import { runSelfTests } from "./core/selfTests";
@@ -102,7 +103,14 @@ export default function App() {
           </VStack>
         </Grid>
       </Box>
-      <FeedbackButton />
+      {current && (
+        <FeedbackButton
+          word={current.word}
+          level={level}
+          levelLabel={LEVELS.find((l) => l.id === level)?.label ?? level}
+          eligible={isFeedbackEligible(current, level)}
+        />
+      )}
     </Box>
   );
 }

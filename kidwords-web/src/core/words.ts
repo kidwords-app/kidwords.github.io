@@ -26,6 +26,8 @@ export type WordEntry = {
   levels: Record<LevelId, LevelCopy>;
   /** When true, replace this word from RDS via /api/words (connectivity testing). */
   dbFetch?: boolean;
+  /** Grades whose copy came from RDS after applyDbWords (feedback FK eligibility). */
+  dbLevels?: LevelId[];
 };
 
 /** Shape of `words-data.json` — moderation tooling can append or replace entries here. */
@@ -88,6 +90,7 @@ function mergeWordFromDb(
     cartoonId: fromDb.cartoonId || bundled.cartoonId,
     levels,
     dbFetch: true,
+    dbLevels,
   };
 
   return { entry, dbLevels };

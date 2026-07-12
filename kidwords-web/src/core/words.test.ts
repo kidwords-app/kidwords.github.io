@@ -89,6 +89,14 @@ describe('applyDbWords', () => {
     expect(merged[0].levels.K.definition).toBe('bundled K');
     expect(merged[0].levels.G1.definition).toBe('bundled G1');
     expect(merged[0].syllables).toBe(9);
+    expect(merged[0].dbLevels).toEqual(['preK']);
+  });
+
+  it('sets dbLevels for all grades present in db', () => {
+    const bundled: WordEntry[] = [{ ...minimalEntry('alpha'), dbFetch: true }];
+    const fromDb: WordEntry[] = [minimalEntry('alpha')];
+    const merged = applyDbWords(bundled, fromDb);
+    expect(merged[0].dbLevels).toEqual(['preK', 'K', 'G1']);
   });
 });
 

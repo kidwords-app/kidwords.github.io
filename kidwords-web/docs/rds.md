@@ -19,3 +19,29 @@ postgres=> \d+ words
 Indexes:
     "words_pkey" PRIMARY KEY, btree (word, grade)
 Access method: heap
+
+### Grade enum
+
+Canonical `grade` values: `preschool`, `kindergarten`, `grade1`.
+
+App `LevelId` mapping: `preK` → `preschool`, `K` → `kindergarten`, `G1` → `grade1`.
+
+### Feedback
+
+```
+postgres=> \d feedback
+                               Table "public.feedback"
+   Column   |            Type             | Collation | Nullable |      Default
+------------+-----------------------------+-----------+----------+-------------------
+ id         | uuid                        |           | not null | gen_random_uuid()
+ word       | text                        |           | not null |
+ grade      | grade                       |           | not null |
+ feedback   | text                        |           | not null |
+ created_at | timestamp without time zone |           |          | now()
+Indexes:
+    "feedback_pkey" PRIMARY KEY, btree (id)
+Foreign-key constraints:
+    "feedback_word_grade_fkey" FOREIGN KEY (word, grade) REFERENCES words(word, grade)
+```
+
+Feedback is accepted only for word+grade rows that exist in `words` (published).

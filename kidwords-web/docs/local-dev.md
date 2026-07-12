@@ -30,7 +30,7 @@ If `AWS_ROLE_ARN` is missing, enable **Development** for that var in the dashboa
 - App: http://localhost:3000  
 - API: http://localhost:3000/api/words  
 
-Bundled words load immediately. Only words with `dbFetch: true` in `src/core/words.ts` are replaced from RDS (currently **empathy**).
+Bundled words load immediately. Only words with `dbFetch: true` in `src/core/words.ts` are replaced from RDS (currently **empathy** and **happy**). Feedback appears only after a successful overlay for the selected grade (`dbLevels`).
 
 ---
 
@@ -58,6 +58,7 @@ Ensure RDS settings and `AWS_ROLE_ARN` are checked for **Development** in Vercel
 | Variable | Default | Notes |
 |----------|---------|-------|
 | `RDS_WORDS_TABLE` | `words` | Postgres table name |
+| `RDS_FEEDBACK_TABLE` | `feedback` | Postgres feedback table name |
 | `RDS_SSL` | SSL on | Set to `false` only for local non-TLS debugging |
 
 ---
@@ -86,14 +87,19 @@ AWS_REGION=us-east-1
 ## Quick checks
 
 ```bash
-# API only — expect JSON array or 500 if RDS/network/OIDC fails
+# Words — expect JSON array or 500 if RDS/network/OIDC fails
 curl http://localhost:3000/api/words
 
-# UI — open empathy; if API works, copy should match DB not bundled fallback
+# Feedback — 201 when word+grade exists in words; 404 if not published
+curl -X POST http://localhost:3000/api/feedback \
+  -H 'Content-Type: application/json' \
+  -d '{"word":"empathy","level":"K","feedback":"clear definition"}'
+
+# UI — open a published word+grade; Feedback appears bottom-right after RDS overlay
 open http://localhost:3000
 ```
 
-If `/api/words` returns 500, the app still works with bundled words. Check:
+If `/api/words` returns 500, the app still works with bundled words (feedback stays hidden until RDS overlay sets `dbLevels`). Check:
 
 1. All six RDS/AWS vars are set **and** `VERCEL_OIDC_TOKEN` is present (re-run `vercel env pull` or `vercel dev`)
 2. RDS security group allows your IP (or VPN/bastion)
@@ -103,9 +109,9 @@ If `/api/words` returns 500, the app still works with bundled words. Check:
 
 ## Vite vs `vercel dev`
 
-| Command | Serves UI | Serves `/api/words` |
-|---------|-----------|---------------------|
+| Command | Serves UI | Serves `/api/*` |
+|---------|-----------|-----------------|
 | `npm run dev` | Yes (port 5173) | No (unless you also run `vercel dev` and use the Vite proxy) |
 | `vercel dev` | Yes (port 3000, via Vite) | Yes |
 
-See [rds.md](./rds.md) for the `words` table schema.
+See [rds.md](./rds.md) for the `words` and `feedback` table schemas.

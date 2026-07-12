@@ -1,23 +1,9 @@
 import type { LevelCopy, LevelId, WordEntry } from "../src/core/words.js";
+import { gradeToLevelId } from "../src/core/grades.js";
 import { getPool } from "./db.js";
 import { logRds } from "./logger.js";
 
 const LEVEL_IDS: LevelId[] = ["preK", "K", "G1"];
-
-/** Maps Postgres `grade` enum values to app level ids. */
-const GRADE_TO_LEVEL: Record<string, LevelId> = {
-  preschool: "preK",
-  pre_k: "preK",
-  prek: "preK",
-  "pre-k": "preK",
-  kindergarten: "K",
-  first_grade: "G1",
-  firstgrade: "G1",
-  "1st_grade": "G1",
-  preK: "preK",
-  K: "K",
-  G1: "G1",
-};
 
 type WordRow = {
   word: string;
@@ -38,11 +24,6 @@ function wordsTable(): string {
     throw new Error(`Invalid RDS_WORDS_TABLE: ${table}`);
   }
   return table;
-}
-
-function gradeToLevelId(grade: string): LevelId | null {
-  const key = grade.trim().toLowerCase().replace(/[\s-]+/g, "_");
-  return GRADE_TO_LEVEL[key] ?? GRADE_TO_LEVEL[grade] ?? null;
 }
 
 function emptyLevels(): Record<LevelId, LevelCopy> {
