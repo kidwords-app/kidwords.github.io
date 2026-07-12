@@ -14,6 +14,8 @@ postgres=> \d+ words
  speak        | text                        |           |          |         | extended |             |              | 
  tags         | text[]                      |           |          |         | extended |             |              | 
  image_s3_key | text                        |           |          |         | extended |             |              | 
+
+`image_s3_key` may be a bare object key (pair with `S3_IMAGES_BUCKET`), an `s3://bucket/key` URI, or an HTTPS S3 object URL. `/api/words` turns it into a presigned HTTPS `imageUrl` for the client. 
  created_at   | timestamp without time zone |           |          | now()   | plain    |             |              | 
  updated_at   | timestamp without time zone |           |          | now()   | plain    |             |              | 
 Indexes:

@@ -2,6 +2,7 @@ import type { LevelCopy, LevelId, WordEntry } from "../src/core/words.js";
 import { gradeToLevelId } from "../src/core/grades.js";
 import { getPool } from "./db.js";
 import { logRds } from "./logger.js";
+import { presignImageUrls } from "./s3.js";
 
 const LEVEL_IDS: LevelId[] = ["preK", "K", "G1"];
 
@@ -36,7 +37,7 @@ function emptyLevels(): Record<LevelId, LevelCopy> {
   return { preK: blank(), K: blank(), G1: blank() };
 }
 
-function rowsToWordEntries(rows: WordRow[]): WordEntry[] {
+function rowsToWordEntries(rows: WordRow[], imageUrls: Map<string, string>): WordEntry[] {
   const byWord = new Map<string, { meta: Partial<WordEntry>; levels: Record<LevelId, LevelCopy> }>();
 
   for (const row of rows) {
@@ -71,12 +72,15 @@ function rowsToWordEntries(rows: WordRow[]): WordEntry[] {
       bucket.meta.tags = row.tags;
     }
 
+    const rawImageKey = row.image_s3_key?.trim();
+    const imageUrl = rawImageKey ? imageUrls.get(rawImageKey) : undefined;
+
     bucket.levels[levelId] = {
       speak: row.speak ?? "",
       definition: row.definition ?? "",
       example: row.example ?? "",
       tryIt: row.try_it ?? "",
-      // imageUrl left unset until S3/CDN base URL is configured
+      ...(imageUrl ? { imageUrl } : {}),
     };
   }
 
@@ -103,7 +107,7 @@ function rowsToWordEntries(rows: WordRow[]): WordEntry[] {
   return entries;
 }
 
-/** Loads vocabulary from RDS (`public.words` by default). */
+/** Loads vocabulary from RDS (`public.words` by default) and presigns S3 image URLs. */
 export async function fetchWordsFromRds(): Promise<WordEntry[]> {
   const table = wordsTable();
   const queryStarted = Date.now();
@@ -116,7 +120,8 @@ export async function fetchWordsFromRds(): Promise<WordEntry[]> {
      ORDER BY word, grade`
   );
 
-  const entries = rowsToWordEntries(rows);
+  const imageUrls = await presignImageUrls(rows.map((row) => row.image_s3_key));
+  const entries = rowsToWordEntries(rows, imageUrls);
   const skippedGrades = rows.length - rows.filter((row) => gradeToLevelId(row.grade) !== null).length;
 
   logRds("query.success", {
@@ -124,6 +129,8 @@ export async function fetchWordsFromRds(): Promise<WordEntry[]> {
     rowCount: rows.length,
     wordCount: entries.length,
     skippedUnmappedGrades: skippedGrades,
+    imageKeys: rows.filter((row) => row.image_s3_key?.trim()).length,
+    imageUrlsPresigned: imageUrls.size,
     durationMs: Date.now() - queryStarted,
   });
 

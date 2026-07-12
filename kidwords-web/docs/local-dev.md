@@ -60,6 +60,10 @@ Ensure RDS settings and `AWS_ROLE_ARN` are checked for **Development** in Vercel
 | `RDS_WORDS_TABLE` | `words` | Postgres table name |
 | `RDS_FEEDBACK_TABLE` | `feedback` | Postgres feedback table name |
 | `RDS_SSL` | SSL on | Set to `false` only for local non-TLS debugging |
+| `S3_IMAGES_BUCKET` | *(none)* | Required when `image_s3_key` is a bare object key (not `s3://` or HTTPS S3 URL) |
+| `S3_PRESIGN_EXPIRES_SECONDS` | `3600` | Lifetime of presigned image URLs returned by `/api/words` |
+
+Word images: `/api/words` reads `image_s3_key` from RDS and returns a short-lived presigned GET URL on each level’s `imageUrl` (via `@aws-sdk/client-s3` + the same OIDC IAM role). The UI uses that URL when present and does not fall back to local `/cartoons` files.
 
 ---
 

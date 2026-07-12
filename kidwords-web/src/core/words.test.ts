@@ -98,6 +98,28 @@ describe('applyDbWords', () => {
     const merged = applyDbWords(bundled, fromDb);
     expect(merged[0].dbLevels).toEqual(['preK', 'K', 'G1']);
   });
+
+  it('preserves imageUrl from db levels', () => {
+    const bundled: WordEntry[] = [{ ...minimalEntry('happy'), dbFetch: true }];
+    const fromDb: WordEntry[] = [
+      {
+        ...minimalEntry('happy'),
+        levels: {
+          preK: { speak: 'a', definition: 'db', example: 'c', tryIt: 'd' },
+          K: {
+            speak: 'a',
+            definition: 'db K',
+            example: 'c',
+            tryIt: 'd',
+            imageUrl: 'https://cdn.example.com/happy-k.png',
+          },
+          G1: { speak: 'a', definition: 'db', example: 'c', tryIt: 'd' },
+        },
+      },
+    ];
+    const merged = applyDbWords(bundled, fromDb);
+    expect(merged[0].levels.K.imageUrl).toBe('https://cdn.example.com/happy-k.png');
+  });
 });
 
 describe('WORDS data structure', () => {

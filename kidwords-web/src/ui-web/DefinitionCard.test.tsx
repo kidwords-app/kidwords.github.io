@@ -87,5 +87,19 @@ describe('DefinitionCard', () => {
     expect(image).toBeInTheDocument();
     expect(image.src).toContain(`/cartoons/${word.cartoonId}.png`);
   });
+
+  it('should prefer remote imageUrl over local cartoon file', () => {
+    const remoteUrl = 'https://cdn.example.com/words/empathy.png';
+    const withRemote = {
+      ...word,
+      levels: {
+        ...word.levels,
+        [level]: { ...word.levels[level], imageUrl: remoteUrl },
+      },
+    };
+    renderWithChakra(<DefinitionCard word={withRemote} level={level} />);
+    const image = screen.getByAltText(new RegExp(word.word, 'i')) as HTMLImageElement;
+    expect(image.src).toBe(remoteUrl);
+  });
 });
 

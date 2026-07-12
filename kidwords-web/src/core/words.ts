@@ -13,7 +13,7 @@ export type LevelCopy = {
   definition: string;
   example: string;
   tryIt: string;
-  /** Resolved S3/CDN URL when loaded from RDS; omitted for bundled words. */
+  /** Presigned S3 HTTPS URL from RDS `image_s3_key`; when set, the card uses this instead of local cartoons. */
   imageUrl?: string;
 };
 
