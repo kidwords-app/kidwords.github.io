@@ -1,6 +1,35 @@
 {
   "words": [
     {
+      "word": "choice",
+      "partOfSpeech": "noun",
+      "syllables": 1,
+      "tags": [
+        "thinking"
+      ],
+      "cartoonId": "choice",
+      "levels": {
+        "preK": {
+          "definition": "A choice is when you have two things, like the blocks or the bear, and you get to pick the one you want.",
+          "example": "The child in the picture is making a choice between the colorful blocks and the soft teddy bear.",
+          "tryIt": "Which toy would *you* make a choice to play with first, the blocks or the teddy bear?",
+          "speak": "CHOICE"
+        },
+        "K": {
+          "definition": "Choice means picking one thing when you have two toys to pick from.",
+          "example": "The child is making a choice between the colorful blocks and the soft teddy bear.",
+          "tryIt": "Which toy would you make a choice to play with?",
+          "speak": "CHOICE"
+        },
+        "G1": {
+          "definition": "A choice is when you get to pick one thing from two or more things, like picking which toy to play with.",
+          "example": "The child is making a happy choice between the colorful blocks and the soft teddy bear.",
+          "tryIt": "If you were the child in the picture, which toy would you make a choice to play with?",
+          "speak": "CHOYS"
+        }
+      }
+    },
+    {
       "word": "clue",
       "partOfSpeech": "noun",
       "syllables": 1,
