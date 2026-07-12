@@ -1,6 +1,35 @@
 {
   "words": [
     {
+      "word": "clue",
+      "partOfSpeech": "noun",
+      "syllables": 1,
+      "tags": [
+        "thinking"
+      ],
+      "cartoonId": "clue",
+      "levels": {
+        "preK": {
+          "definition": "A clue is a little hint that helps you find something, like a tiny cookie sprinkle can help you find cookies!",
+          "example": "That tiny cookie sprinkle on the floor is a clue that yummy cookies might be in the cabinet!",
+          "tryIt": "What do you think this colorful sprinkle is a clue for?",
+          "speak": "KLOO"
+        },
+        "K": {
+          "definition": "A clue is a little hint that helps you find or guess something, like the tiny sprinkle helping you guess what's in the cabinet.",
+          "example": "The tiny sprinkle on the floor was a perfect clue to guess there were cookies in the cabinet!",
+          "tryIt": "What other little clues might you find near the cabinet that could tell you what's inside?",
+          "speak": "CLOO"
+        },
+        "G1": {
+          "definition": "A clue is a little hint that helps you find something, like a tiny cookie sprinkle on the floor.",
+          "example": "The tiny cookie sprinkle on the floor was a clue about where yummy treats might be hiding!",
+          "tryIt": "If you found a tiny toy block on the floor, what would that be a clue about?",
+          "speak": "KLOO"
+        }
+      }
+    },
+    {
       "word": "disappointment",
       "partOfSpeech": "noun",
       "syllables": 4,
