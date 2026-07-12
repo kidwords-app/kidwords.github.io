@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Sidebar } from './Sidebar';
 import { ChakraProvider, defaultSystem } from '@chakra-ui/react';
-import { WORDS } from '../core/words';
+import { TEST_WORDS } from '../test/fixtures/test-words';
 
 const renderWithChakra = (component: React.ReactElement) => {
   return render(
@@ -17,7 +17,7 @@ describe('Sidebar', () => {
   const mockOnSelectWord = vi.fn();
 
   const defaultProps = {
-    words: WORDS,
+    words: TEST_WORDS,
     selectedWord: undefined,
     onSelectWord: mockOnSelectWord,
   };
@@ -37,7 +37,7 @@ describe('Sidebar', () => {
 
   it('should render all words as buttons', () => {
     renderWithChakra(<Sidebar {...defaultProps} />);
-    WORDS.forEach((word) => {
+    TEST_WORDS.forEach((word) => {
       expect(screen.getByText(word.word)).toBeInTheDocument();
     });
   });
@@ -46,7 +46,7 @@ describe('Sidebar', () => {
     const user = userEvent.setup();
     renderWithChakra(<Sidebar {...defaultProps} />);
     
-    const firstWord = WORDS[0];
+    const firstWord = TEST_WORDS[0];
     const button = screen.getByText(firstWord.word);
     await user.click(button);
     
@@ -54,7 +54,7 @@ describe('Sidebar', () => {
   });
 
   it('should highlight selected word', () => {
-    const selectedWord = WORDS[0].word;
+    const selectedWord = TEST_WORDS[0].word;
     renderWithChakra(<Sidebar {...defaultProps} selectedWord={selectedWord} />);
     
     const button = screen.getByText(selectedWord);

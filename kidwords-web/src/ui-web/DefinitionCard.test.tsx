@@ -2,7 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { DefinitionCard } from './DefinitionCard';
 import { ChakraProvider, defaultSystem } from '@chakra-ui/react';
-import { WORDS, type LevelId } from '../core/words';
+import type { LevelId } from '../core/words';
+import { TEST_WORDS } from '../test/fixtures/test-words';
 
 const renderWithChakra = (component: React.ReactElement) => {
   return render(
@@ -13,7 +14,7 @@ const renderWithChakra = (component: React.ReactElement) => {
 };
 
 describe('DefinitionCard', () => {
-  const word = WORDS[0]; // Use first word for testing
+  const word = TEST_WORDS[0]; // Use first word for testing
   const level: LevelId = 'K';
 
   it('should render without crashing', () => {
