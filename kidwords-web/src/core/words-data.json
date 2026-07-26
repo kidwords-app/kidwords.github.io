@@ -140,6 +140,32 @@
       }
     },
     {
+      "word": "inspire",
+      "partOfSpeech": "verb",
+      "syllables": 2,
+      "tags": [
+        "thinking"
+      ],
+      "cartoonId": "inspire",
+      "levels": {
+        "preK": {
+          "definition": "To inspire means something gives you a big, new idea for your paper!",
+          "example": "That colorful drawing made you want to pick up your yellow crayon and draw something wonderful on your paper!",
+          "tryIt": "Now that you have your crayon, what wonderful thing will you draw on your paper?"
+        },
+        "K": {
+          "definition": "It's when a picture gives you a really good idea for what you want to draw on your paper with your crayons!",
+          "example": "Looking at the bright drawing on the wall makes the child feel inspired to use their crayons on the blank paper.",
+          "tryIt": "What kind of picture makes you want to pick up your crayon and draw something amazing on your paper right now?"
+        },
+        "G1": {
+          "definition": "Inspire means when something gives you a new idea or makes you really want to draw something on your paper!",
+          "example": "The colorful drawing on the wall helped to inspire the child to pick up a crayon and start drawing on their paper.",
+          "tryIt": "What makes you want to pick up a crayon and draw something on your paper?"
+        }
+      }
+    },
+    {
       "word": "mystery",
       "partOfSpeech": "noun",
       "syllables": 3,
