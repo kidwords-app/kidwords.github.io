@@ -59,6 +59,35 @@
       }
     },
     {
+      "word": "concept",
+      "partOfSpeech": "noun",
+      "syllables": 2,
+      "tags": [
+        "thinking"
+      ],
+      "cartoonId": "concept",
+      "levels": {
+        "preK": {
+          "definition": "A concept is a special idea in your head, like what you want to draw on your paper with your crayon.",
+          "example": "The child has a cool concept in their head for what to draw on the paper.",
+          "tryIt": "What fun concept can you think of for your next picture?",
+          "speak": "CON-sept"
+        },
+        "K": {
+          "definition": "A concept is an idea, like the picture you think of in your head for your paper.",
+          "example": "The child is thinking of a concept for a drawing on the paper.",
+          "tryIt": "Can you think of a concept, an idea, to draw on your paper right now?",
+          "speak": "CON-sept"
+        },
+        "G1": {
+          "definition": "A concept is an idea you have in your head.",
+          "example": "The child thought of a concept for what to draw on the paper with the crayon.",
+          "tryIt": "What concept do you have for drawing something right now?",
+          "speak": "CON-sept"
+        }
+      }
+    },
+    {
       "word": "disappointment",
       "partOfSpeech": "noun",
       "syllables": 4,
