@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { normalize, filterWords } from './search';
-import { WORDS } from './words';
+import { TEST_WORDS } from '../test/fixtures/test-words';
 
 describe('normalize', () => {
   it('should convert to lowercase', () => {
@@ -36,53 +36,53 @@ describe('normalize', () => {
 
 describe('filterWords', () => {
   it('should return all words when query is empty', () => {
-    const result = filterWords(WORDS, '');
-    expect(result).toHaveLength(WORDS.length);
+    const result = filterWords(TEST_WORDS, '');
+    expect(result).toHaveLength(TEST_WORDS.length);
   });
 
   it('should filter by word name', () => {
-    const result = filterWords(WORDS, 'happy');
+    const result = filterWords(TEST_WORDS, 'happy');
     expect(result.length).toBeGreaterThan(0);
     expect(result[0].word).toBe('happy');
   });
 
   it('should filter by part of speech', () => {
-    const result = filterWords(WORDS, 'noun');
+    const result = filterWords(TEST_WORDS, 'noun');
     expect(result.length).toBeGreaterThan(0);
     expect(result.every(w => w.partOfSpeech === 'noun')).toBe(true);
   });
 
   it('should filter by tags', () => {
-    const result = filterWords(WORDS, 'feelings');
+    const result = filterWords(TEST_WORDS, 'feelings');
     expect(result.length).toBeGreaterThan(0);
     expect(result.every(w => w.tags.includes('feelings'))).toBe(true);
   });
 
   it('should be case insensitive', () => {
-    const result1 = filterWords(WORDS, 'HAPPY');
-    const result2 = filterWords(WORDS, 'happy');
+    const result1 = filterWords(TEST_WORDS, 'HAPPY');
+    const result2 = filterWords(TEST_WORDS, 'happy');
     expect(result1).toEqual(result2);
   });
 
   it('should handle partial matches', () => {
-    const result = filterWords(WORDS, 'hap');
+    const result = filterWords(TEST_WORDS, 'hap');
     expect(result.some(w => w.word === 'happy')).toBe(true);
   });
 
   it('should return empty array for no matches', () => {
-    const result = filterWords(WORDS, 'nonexistentword123');
+    const result = filterWords(TEST_WORDS, 'nonexistentword123');
     expect(result).toHaveLength(0);
   });
 
   it('should sort results alphabetically by word', () => {
-    const result = filterWords(WORDS, '');
+    const result = filterWords(TEST_WORDS, '');
     for (let i = 1; i < result.length; i++) {
       expect(result[i].word.localeCompare(result[i - 1].word)).toBeGreaterThanOrEqual(0);
     }
   });
 
   it('should handle special characters in query', () => {
-    const result = filterWords(WORDS, 'empathy!');
+    const result = filterWords(TEST_WORDS, 'empathy!');
     expect(result.length).toBeGreaterThan(0);
     expect(result[0].word).toBe('empathy');
   });

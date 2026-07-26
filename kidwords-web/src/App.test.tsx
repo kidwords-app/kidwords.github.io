@@ -3,8 +3,16 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ChakraProvider, defaultSystem } from '@chakra-ui/react';
 import App from './App';
-import { WORDS } from './core/words';
+import { TEST_WORDS } from './test/fixtures/test-words';
 import * as selfTestsModule from './core/selfTests';
+
+vi.mock('./core/useWords', () => ({
+  useWords: () => ({
+    words: TEST_WORDS,
+    dbSyncing: false,
+    dbError: null,
+  }),
+}));
 
 // Mock self-tests to avoid console errors during tests
 vi.mock('./core/selfTests', () => ({
@@ -47,7 +55,7 @@ describe('App', () => {
 
   it('should display first word by default', () => {
     renderWithChakra(<App />);
-    const firstWord = WORDS[0];
+    const firstWord = TEST_WORDS[0];
     // The word appears in both sidebar and definition card, so use getAllByText
     const wordElements = screen.getAllByText(firstWord.word);
     expect(wordElements.length).toBeGreaterThan(0);
@@ -66,7 +74,7 @@ describe('App', () => {
     const happyElements = screen.getAllByText('happy');
     expect(happyElements.length).toBeGreaterThan(0);
     // Verify the definition card shows the happy word's content
-    const happyWord = WORDS.find(w => w.word === 'happy');
+    const happyWord = TEST_WORDS.find(w => w.word === 'happy');
     if (happyWord) {
       expect(screen.getByText(happyWord.levels.K.definition)).toBeInTheDocument();
     }
@@ -77,7 +85,7 @@ describe('App', () => {
     renderWithChakra(<App />);
     
     // Find a word that's not the first one
-    const secondWord = WORDS[1];
+    const secondWord = TEST_WORDS[1];
     const wordButtons = screen.getAllByText(secondWord.word);
     // Click the first instance (in the sidebar)
     await user.click(wordButtons[0]);
@@ -129,7 +137,7 @@ describe('App', () => {
     
     // When a category is selected, the first word from that category should be displayed
     // The word should appear in the definition card
-    const firstWord = WORDS[0];
+    const firstWord = TEST_WORDS[0];
     const wordElements = screen.getAllByText(firstWord.word);
     expect(wordElements.length).toBeGreaterThan(0);
     // Verify definition card content is present
@@ -139,7 +147,7 @@ describe('App', () => {
   it('should display definition card for selected word', () => {
     renderWithChakra(<App />);
     
-    const firstWord = WORDS[0];
+    const firstWord = TEST_WORDS[0];
     // The word should appear in the definition card (as a heading)
     // Use getAllByText since the word appears in both sidebar and definition card
     const wordElements = screen.getAllByText(firstWord.word);

@@ -16,11 +16,11 @@ describe('runSelfTests', () => {
   });
 
   it('should run without throwing errors for valid data', () => {
-    expect(() => runSelfTests()).not.toThrow();
+    expect(() => runSelfTests(WORDS)).not.toThrow();
   });
 
   it('should verify all words have all levels', () => {
-    runSelfTests();
+    runSelfTests(WORDS);
     
     // Should not have any assertion failures
     const failedAssertions = consoleAssertSpy.mock.calls.filter(
@@ -30,14 +30,14 @@ describe('runSelfTests', () => {
   });
 
   it('should verify all words have cartoonId', () => {
-    runSelfTests();
+    runSelfTests(WORDS);
     
     // Should have at least one assertion checking cartoonId
     expect(consoleAssertSpy).toHaveBeenCalled();
   });
 
   it('should verify normalize function works correctly', () => {
-    runSelfTests();
+    runSelfTests(WORDS);
     
     // Check that normalize assertion was made
     const normalizeAssertions = consoleAssertSpy.mock.calls.filter(
@@ -47,7 +47,7 @@ describe('runSelfTests', () => {
   });
 
   it('should complete all validation checks', () => {
-    runSelfTests();
+    runSelfTests(WORDS);
     
     // Should have made multiple assertions
     expect(consoleAssertSpy).toHaveBeenCalled();

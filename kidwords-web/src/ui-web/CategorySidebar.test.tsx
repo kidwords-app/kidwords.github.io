@@ -3,7 +3,8 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { CategorySidebar } from './CategorySidebar';
 import { ChakraProvider, defaultSystem } from '@chakra-ui/react';
-import { WORDS, type LevelId } from '../core/words';
+import type { LevelId } from '../core/words';
+import { TEST_WORDS } from '../test/fixtures/test-words';
 import type { CategoryId } from '../core/categories';
 
 const renderWithChakra = (component: React.ReactElement) => {
@@ -18,7 +19,7 @@ describe('CategorySidebar', () => {
   const mockOnSelectCategory = vi.fn();
 
   const defaultProps = {
-    words: WORDS,
+    words: TEST_WORDS,
     selectedCategory: null as CategoryId | null,
     level: 'K' as LevelId,
     onSelectCategory: mockOnSelectCategory,

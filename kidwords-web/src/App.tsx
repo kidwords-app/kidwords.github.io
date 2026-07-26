@@ -8,7 +8,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { Box, Grid, VStack } from "@chakra-ui/react";
 
-import { LEVELS, type LevelId, WORDS, type WordEntry } from "./core/words";
+import { LEVELS, WORDS, type LevelId, type WordEntry } from "./core/words";
+import { isFeedbackEligible } from "./core/feedback";
+import { useWords } from "./core/useWords";
 import { filterWords } from "./core/search";
 import { runSelfTests } from "./core/selfTests";
 import type { CategoryId } from "./core/categories";
@@ -23,25 +25,24 @@ import { TipsTabs } from "./ui-web/TipsTabs";
 import { FeedbackButton } from "./ui-web/FeedbackButton";
 
 export default function App() {
-  // Run self-tests once in dev
+  const { words } = useWords();
+
   useEffect(() => {
     try {
-      runSelfTests();
+      runSelfTests(words);
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e);
     }
-  }, []);
+  }, [words]);
 
   const [level, setLevel] = useState<LevelId>("K");
   const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<CategoryId | null>(null);
   const [pickedWord, setPickedWord] = useState<string>(WORDS[0]?.word ?? "");
 
-  // Filter words by search query
-  const searchFiltered = useMemo(() => filterWords(WORDS, query), [query]);
+  const searchFiltered = useMemo(() => filterWords(words, query), [words, query]);
 
-  // Filter words by selected category
   const categoryFiltered = useMemo(() => {
     if (selectedCategory === null) {
       return searchFiltered;
@@ -54,7 +55,6 @@ export default function App() {
   const current: WordEntry | null =
     categoryFiltered.find((w) => w.word === pickedWord) ?? categoryFiltered[0] ?? null;
 
-  // Reset selected word when category or level changes
   useEffect(() => {
     if (categoryFiltered.length > 0 && !categoryFiltered.find((w) => w.word === pickedWord)) {
       setPickedWord(categoryFiltered[0].word);
@@ -103,7 +103,14 @@ export default function App() {
           </VStack>
         </Grid>
       </Box>
-      <FeedbackButton />
+      {current && (
+        <FeedbackButton
+          word={current.word}
+          level={level}
+          levelLabel={LEVELS.find((l) => l.id === level)?.label ?? level}
+          eligible={isFeedbackEligible(current, level)}
+        />
+      )}
     </Box>
   );
 }

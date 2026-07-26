@@ -27,3 +27,5 @@ coverage/
 *.sw?
 .env
 **/.DS_Store
+.vercel
+.env*

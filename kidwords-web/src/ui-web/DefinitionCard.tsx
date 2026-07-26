@@ -6,13 +6,23 @@ function cartoonSrc(cartoonId: string) {
   return `/cartoons/${cartoonId}.png`;
 }
 
+function wordImageSrc(word: WordEntry, level: LevelId): string {
+  const remote = word.levels[level].imageUrl?.trim();
+  if (remote) {
+    return remote;
+  }
+  return cartoonSrc(word.cartoonId);
+}
+
 export function DefinitionCard({ word, level }: { word: WordEntry; level: LevelId }) {
   const L = word.levels[level];
+  const imageSrc = wordImageSrc(word, level);
+  const usingRemoteImage = Boolean(L.imageUrl?.trim());
   const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     setImageError(false);
-  }, [word.cartoonId]);
+  }, [imageSrc]);
 
   return (
     <Box bg="white" p={6} rounded="2xl" shadow="md">
@@ -69,12 +79,12 @@ export function DefinitionCard({ word, level }: { word: WordEntry; level: LevelI
             <Box bg="purple.50" rounded="xl" p={4} textAlign="center" fontSize="sm" minH="180px" display="flex" alignItems="center" justifyContent="center">
               <Box>
                 Add image<br />
-                /public/cartoons/{word.cartoonId}.png
+                {usingRemoteImage ? imageSrc : `/public/cartoons/${word.cartoonId}.png`}
               </Box>
             </Box>
           ) : (
             <Image
-              src={cartoonSrc(word.cartoonId)}
+              src={imageSrc}
               alt={`Cartoon of ${word.word}`}
               borderRadius="xl"
               shadow="md"

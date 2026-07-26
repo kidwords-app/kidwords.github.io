@@ -4,13 +4,17 @@ import {
   Button,
   Input,
   Text,
+  Textarea,
   VStack,
   Heading,
 } from "@chakra-ui/react";
+import type { LevelId } from "../core/words";
+import { FEEDBACK_MAX_LENGTH } from "../core/feedback";
+import { submitFeedback } from "../core/submitFeedback";
 
 /**
  * Simple adult gate: asks a basic math question
- * This prevents young children from accidentally opening email
+ * This prevents young children from accidentally submitting feedback
  */
 function generateAdultGateQuestion(): { question: string; answer: number } {
   const num1 = Math.floor(Math.random() * 10) + 1;
@@ -21,60 +25,98 @@ function generateAdultGateQuestion(): { question: string; answer: number } {
   };
 }
 
-export function FeedbackButton() {
+type Step = "gate" | "form" | "success";
+
+export type FeedbackButtonProps = {
+  word: string;
+  level: LevelId;
+  levelLabel: string;
+  /** When false, the button is not shown (word+grade not published in RDS). */
+  eligible: boolean;
+};
+
+export function FeedbackButton({
+  word,
+  level,
+  levelLabel,
+  eligible,
+}: FeedbackButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [step, setStep] = useState<Step>("gate");
   const [gateQuestion, setGateQuestion] = useState(() => generateAdultGateQuestion());
   const [userAnswer, setUserAnswer] = useState("");
+  const [feedbackText, setFeedbackText] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [isVerifying, setIsVerifying] = useState(false);
+  const [isBusy, setIsBusy] = useState(false);
 
-  const handleOpen = () => {
+  if (!eligible) {
+    return null;
+  }
+
+  const resetModal = () => {
+    setStep("gate");
     setError(null);
     setUserAnswer("");
+    setFeedbackText("");
+    setIsBusy(false);
     setGateQuestion(generateAdultGateQuestion());
+  };
+
+  const handleOpen = () => {
+    resetModal();
     setIsOpen(true);
   };
 
   const handleClose = () => {
     setIsOpen(false);
-    setError(null);
-    setUserAnswer("");
+    resetModal();
   };
 
   const handleVerify = () => {
-    setIsVerifying(true);
+    setIsBusy(true);
     setError(null);
 
     const answer = parseInt(userAnswer.trim(), 10);
-    
+
     if (isNaN(answer)) {
       setError("Please enter a number");
-      setIsVerifying(false);
+      setIsBusy(false);
       return;
     }
 
     if (answer !== gateQuestion.answer) {
       setError("Incorrect answer. Please try again.");
-      setIsVerifying(false);
+      setIsBusy(false);
       return;
     }
 
-    // Success - open mailto link
+    setStep("form");
+    setError(null);
+    setIsBusy(false);
+  };
+
+  const handleSubmit = async () => {
+    setIsBusy(true);
+    setError(null);
+
+    const trimmed = feedbackText.trim();
+    if (!trimmed) {
+      setError("Please enter your feedback");
+      setIsBusy(false);
+      return;
+    }
+
     try {
-      const subject = encodeURIComponent("Feedback: <enter summary here>");
-      const body = encodeURIComponent("Please let us know how KidWords can improve its experience: ");
-      const mailtoLink = `mailto:sumita.sami@gmail.com?subject=${subject}&body=${body}`;
-      
-      window.location.href = mailtoLink;
-      handleClose();
-    } catch (e) {
+      await submitFeedback({ word, level, feedback: trimmed });
+      setStep("success");
+    } catch {
       setError("Please try again");
     } finally {
-      setIsVerifying(false);
+      setIsBusy(false);
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleGateKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleVerify();
     }
@@ -82,12 +124,7 @@ export function FeedbackButton() {
 
   return (
     <>
-      <Box
-        position="fixed"
-        bottom={4}
-        right={4}
-        zIndex={1000}
-      >
+      <Box position="fixed" bottom={4} right={4} zIndex={1000}>
         <Button
           size="sm"
           colorScheme="gray"
@@ -126,7 +163,11 @@ export function FeedbackButton() {
           >
             <VStack gap={4} align="stretch">
               <Box display="flex" justifyContent="space-between" alignItems="center">
-                <Heading size="md">Adult Verification</Heading>
+                <Heading size="md">
+                  {step === "gate" && "Adult Verification"}
+                  {step === "form" && "Share feedback"}
+                  {step === "success" && "Thank you"}
+                </Heading>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -136,41 +177,71 @@ export function FeedbackButton() {
                   ×
                 </Button>
               </Box>
-              <Text>
-                To provide feedback, please answer this question:
-              </Text>
-              <Text fontWeight="semibold" fontSize="lg">
-                {gateQuestion.question}
-              </Text>
-              <Input
-                type="number"
-                value={userAnswer}
-                onChange={(e) => setUserAnswer(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Enter your answer"
-                autoFocus
-              />
-              {error && (
-                <Box
-                  bg="red.50"
-                  border="1px solid"
-                  borderColor="red.200"
-                  color="red.800"
-                  p={3}
-                  borderRadius="md"
-                  fontSize="sm"
-                >
-                  {error}
-                </Box>
+
+              {step === "gate" && (
+                <>
+                  <Text>To provide feedback, please answer this question:</Text>
+                  <Text fontWeight="semibold" fontSize="lg">
+                    {gateQuestion.question}
+                  </Text>
+                  <Input
+                    type="number"
+                    value={userAnswer}
+                    onChange={(e) => setUserAnswer(e.target.value)}
+                    onKeyPress={handleGateKeyPress}
+                    placeholder="Enter your answer"
+                    autoFocus
+                  />
+                  {error && <ErrorBanner message={error} />}
+                  <Button
+                    colorScheme="purple"
+                    onClick={handleVerify}
+                    loading={isBusy}
+                    disabled={!userAnswer.trim()}
+                  >
+                    Verify
+                  </Button>
+                </>
               )}
-              <Button
-                colorScheme="purple"
-                onClick={handleVerify}
-                loading={isVerifying}
-                disabled={!userAnswer.trim()}
-              >
-                Verify
-              </Button>
+
+              {step === "form" && (
+                <>
+                  <Text fontSize="sm" color="gray.600">
+                    Feedback for <Text as="span" fontWeight="semibold">{word}</Text>
+                    {" · "}
+                    <Text as="span" fontWeight="semibold">{levelLabel}</Text>
+                  </Text>
+                  <Textarea
+                    value={feedbackText}
+                    onChange={(e) => setFeedbackText(e.target.value)}
+                    placeholder="What could we improve about this word?"
+                    rows={5}
+                    maxLength={FEEDBACK_MAX_LENGTH}
+                    autoFocus
+                  />
+                  <Text fontSize="xs" color="gray.500" textAlign="right">
+                    {feedbackText.trim().length}/{FEEDBACK_MAX_LENGTH}
+                  </Text>
+                  {error && <ErrorBanner message={error} />}
+                  <Button
+                    colorScheme="purple"
+                    onClick={handleSubmit}
+                    loading={isBusy}
+                    disabled={!feedbackText.trim()}
+                  >
+                    Submit
+                  </Button>
+                </>
+              )}
+
+              {step === "success" && (
+                <>
+                  <Text>Thanks — your feedback was saved.</Text>
+                  <Button colorScheme="purple" onClick={handleClose}>
+                    Done
+                  </Button>
+                </>
+              )}
             </VStack>
           </Box>
         </Box>
@@ -179,3 +250,18 @@ export function FeedbackButton() {
   );
 }
 
+function ErrorBanner({ message }: { message: string }) {
+  return (
+    <Box
+      bg="red.50"
+      border="1px solid"
+      borderColor="red.200"
+      color="red.800"
+      p={3}
+      borderRadius="md"
+      fontSize="sm"
+    >
+      {message}
+    </Box>
+  );
+}
