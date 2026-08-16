@@ -10,4 +10,8 @@ Kidwords solves that by creating simple, age-appropriate explanations with accom
 
 # Current iteration 
 
-The current iteration includes 6 hardcoded words, along with their explanations and if available, a cartoon explanation. 
+The web app ships a **bundled** vocabulary in `src/core/words.ts` (plus optional `words-data.json` merges) so the UI works when the API is down.
+
+Word copy is also stored in **AWS RDS Postgres** and served by `GET /api/words`. After load, matching word+grade rows from RDS overlay the bundle (per grade). RDS-backed grades can include S3 images (presigned URLs) and can accept **feedback** for published word+grade rows.
+
+See [rds-migration.md](./rds-migration.md) for the migration overview, [rds.md](./rds.md) for schema, and [local-dev.md](./local-dev.md) for running the API locally.

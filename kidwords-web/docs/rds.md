@@ -1,5 +1,6 @@
 # Kidwords App — RDS schema
 
+Migration overview and overlay behavior: [rds-migration.md](./rds-migration.md).  
 For local env vars and `vercel dev` testing, see [local-dev.md](./local-dev.md).
 
 postgres=> \d+ words

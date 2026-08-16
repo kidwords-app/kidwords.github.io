@@ -2,6 +2,8 @@
 
 This document explains how the KidWords app is structured today, why it is structured this way, and how to safely evolve it from a web app into a fully native mobile application.
 
+**Separate track:** moving vocabulary onto RDS is documented in [rds-migration.md](./rds-migration.md) (schema: [rds.md](./rds.md), local setup: [local-dev.md](./local-dev.md)). That work does not replace this UI-layer plan.
+
 ---
 
 ## 1. High-Level Goal
@@ -11,6 +13,7 @@ Build a kid-friendly vocabulary app that:
 - Can later become a fully native iOS app
 - Avoids rewriting business logic
 - Keeps UI flexible and replaceable
+- Can overlay word copy from RDS while keeping a bundled fallback
 
 The guiding principle is **separation of concerns**.
 
@@ -32,19 +35,19 @@ The guiding principle is **separation of concerns**.
 Located in: `src/core/`
 
 Contains:
-- Word definitions and metadata
+- Word definitions and metadata (bundled + `applyDbWords` overlay helpers)
+- Client fetch/hooks for RDS overlay (`fetchWords`, `useWords`)
 - Search and filtering logic
 - Validation and helpers
 
 **Rules:**
-- No React imports
-- No UI logic
-- No browser APIs
+- No UI component libraries inside core helpers that must stay portable
+- Prefer pure functions for merge/search; isolate `fetch` / hooks at the edges
 
 This code can run in:
 - Web (React)
-- React Native (Expo)
-- Node scripts
+- React Native (Expo) — domain helpers especially
+- Node scripts / Vercel `lib/` (shared types and grade mapping)
 - Tests
 
 ### 2.2 UI Layer (Replaceable)
@@ -83,25 +86,25 @@ Adding more words, languages, or features doesn’t affect UI architecture.
 
 ## 4. File Layout Overview
 
-```
-src/
-  core/
-    words.ts          # Vocabulary data
-    search.ts         # Filtering + helpers
-    selfTests.ts      # Validation checks
+See [structure.md](./structure.md) for the current tree (`api/`, `lib/`, `src/core/`, `src/ui-web/`).
 
-  ui-web/
-    HeaderBar.tsx
-    Sidebar.tsx
-    DefinitionCard.tsx
-    TipsTabs.tsx
-
-  App.tsx             # App composition
-```
+Server-only RDS/S3 code lives under `api/` and `lib/` so the Vite client bundle stays thin. Core still owns the bundled word list and the merge rules used after fetch.
 
 ---
 
-## 5. Future Migration Plan (Web → Native)
+## 5. Data migration (bundled → RDS)
+
+In parallel with the UI plan below:
+
+- Default: bundled words in `src/core/words.ts`
+- Overlay: `GET /api/words` → per-grade merge for any matching word
+- Feedback and S3 images require published RDS rows
+
+Full checklist and architecture: [rds-migration.md](./rds-migration.md).
+
+---
+
+## 6. Future Migration Plan (Web → Native)
 
 ### Phase 1 — Current (Web)
 - Chakra UI
@@ -121,16 +124,17 @@ src/
 
 ---
 
-## 6. Design Rules Going Forward
+## 7. Design Rules Going Forward
 
-- Never import UI libraries inside `core/`
-- Never embed data inside UI components
+- Never import UI libraries inside portable `core/` helpers
+- Never embed vocabulary rows inside UI components
 - Prefer pure functions over side effects
 - Keep visual styling replaceable
+- Keep secrets and DB access in `lib/` / Vercel env — never in the client bundle
 
 ---
 
-## 7. Why This Matters
+## 8. Why This Matters
 
 This structure lets you:
 - Move fast today

@@ -138,6 +138,7 @@ Every fetch-driven screen must include:
 **Always start by reading:**
 - `docs/development.md`
 - `docs/product.md` (if present)
+- `docs/structure.md` and `docs/rds-migration.md` when touching vocabulary / RDS / `api/` / `lib/`
 - `docs/quality-bar.md` (if present)
 
 ### Ticket Format (use this in issues/PRs)
@@ -163,14 +164,19 @@ When implementing a ticket:
 
 ---
 
-## Local Setup (fill these in once repo exists)
+## Local Setup
 
 ```bash
-# install
+cd kidwords-web
 npm install
 
-# run
+# UI only (no /api/*)
 npm run dev
+
+# UI + /api/words and /api/feedback (RDS) — preferred when testing the migration
+vercel link          # once
+vercel env pull .env.local
+vercel dev           # http://localhost:3000 — see docs/local-dev.md
 
 # test
 npm run test:coverage
@@ -187,6 +193,8 @@ npm run build
 # CI script (runs typecheck, tests, and build - use in CI/CD)
 npm run ci
 ```
+
+RDS schema and migration overview: [rds.md](./rds.md), [rds-migration.md](./rds-migration.md).
 
 ## Pre-commit Hooks
 

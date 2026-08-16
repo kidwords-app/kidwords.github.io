@@ -1,5 +1,7 @@
 # Local dev — RDS API testing
 
+Architecture and overlay behavior: [rds-migration.md](./rds-migration.md). Schema: [rds.md](./rds.md).
+
 Use **`vercel dev`** (not `npm run dev` alone) to run the React app and `/api/words` on one port. The API connects to RDS via Vercel OIDC + IAM auth (`lib/db.ts`).
 
 ```bash
