@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { fetchWords } from "./fetchWords";
-import { WORDS, applyDbWords, wordsMarkedForDbFetch, type WordEntry } from "./words";
+import { WORDS, applyDbWords, type WordEntry } from "./words";
 
 export type WordsState = {
   words: WordEntry[];
-  /** True while refreshing words marked with `dbFetch` from RDS. */
+  /** True while overlaying bundled words with RDS copy from /api/words. */
   dbSyncing: boolean;
   /** Set when the RDS overlay fails; bundled words are still shown. */
   dbError: string | null;
@@ -12,15 +12,10 @@ export type WordsState = {
 
 export function useWords(): WordsState {
   const [words, setWords] = useState<WordEntry[]>(WORDS);
-  const [dbSyncing, setDbSyncing] = useState(() => wordsMarkedForDbFetch(WORDS).length > 0);
+  const [dbSyncing, setDbSyncing] = useState(true);
   const [dbError, setDbError] = useState<string | null>(null);
 
   useEffect(() => {
-    const marked = wordsMarkedForDbFetch(WORDS);
-    if (marked.length === 0) {
-      return;
-    }
-
     let cancelled = false;
 
     fetchWords()

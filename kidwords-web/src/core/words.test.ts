@@ -41,22 +41,18 @@ describe('mergeWordEntries', () => {
 });
 
 describe('applyDbWords', () => {
-  it('replaces only entries marked dbFetch', () => {
-    const bundled: WordEntry[] = [
-      { ...minimalEntry('alpha'), dbFetch: true },
-      { ...minimalEntry('beta'), dbFetch: false },
-    ];
+  it('overlays bundled words when the same word exists in db', () => {
+    const bundled: WordEntry[] = [minimalEntry('alpha'), minimalEntry('beta')];
     const fromDb: WordEntry[] = [
       { ...minimalEntry('alpha'), syllables: 9, cartoonId: 'from-db' },
     ];
     const merged = applyDbWords(bundled, fromDb);
     expect(merged[0].syllables).toBe(9);
-    expect(merged[0].dbFetch).toBe(true);
     expect(merged[1].syllables).toBe(1);
   });
 
   it('keeps bundled entry when db row is missing', () => {
-    const bundled: WordEntry[] = [{ ...minimalEntry('missing'), dbFetch: true, syllables: 2 }];
+    const bundled: WordEntry[] = [{ ...minimalEntry('missing'), syllables: 2 }];
     const merged = applyDbWords(bundled, []);
     expect(merged[0].syllables).toBe(2);
   });
@@ -65,7 +61,6 @@ describe('applyDbWords', () => {
     const bundled: WordEntry[] = [
       {
         ...minimalEntry('happy'),
-        dbFetch: true,
         levels: {
           preK: { speak: 'b-preK', definition: 'bundled preK', example: 'x', tryIt: 'y' },
           K: { speak: 'b-K', definition: 'bundled K', example: 'x', tryIt: 'y' },
@@ -93,14 +88,14 @@ describe('applyDbWords', () => {
   });
 
   it('sets dbLevels for all grades present in db', () => {
-    const bundled: WordEntry[] = [{ ...minimalEntry('alpha'), dbFetch: true }];
+    const bundled: WordEntry[] = [minimalEntry('alpha')];
     const fromDb: WordEntry[] = [minimalEntry('alpha')];
     const merged = applyDbWords(bundled, fromDb);
     expect(merged[0].dbLevels).toEqual(['preK', 'K', 'G1']);
   });
 
   it('preserves imageUrl from db levels', () => {
-    const bundled: WordEntry[] = [{ ...minimalEntry('happy'), dbFetch: true }];
+    const bundled: WordEntry[] = [minimalEntry('happy')];
     const fromDb: WordEntry[] = [
       {
         ...minimalEntry('happy'),

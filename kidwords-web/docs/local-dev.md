@@ -30,7 +30,7 @@ If `AWS_ROLE_ARN` is missing, enable **Development** for that var in the dashboa
 - App: http://localhost:3000  
 - API: http://localhost:3000/api/words  
 
-Bundled words load immediately. Only words with `dbFetch: true` in `src/core/words.ts` are replaced from RDS (currently **empathy** and **happy**). Feedback appears only after a successful overlay for the selected grade (`dbLevels`).
+Bundled words load immediately. Any word+grade present in RDS replaces the bundled copy after `/api/words` succeeds. Feedback appears only for grades overlaid from RDS (`dbLevels`).
 
 ---
 

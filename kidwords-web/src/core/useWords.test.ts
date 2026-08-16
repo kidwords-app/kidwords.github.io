@@ -14,7 +14,7 @@ describe('useWords', () => {
     expect(result.current.words).toEqual(WORDS);
   });
 
-  it('overlays dbFetch words when the API succeeds', async () => {
+  it('overlays bundled words when the API succeeds', async () => {
     const fromDb = [{ ...WORDS[0], syllables: 99 }];
     vi.spyOn(fetchWordsModule, 'fetchWords').mockResolvedValue(fromDb);
 
