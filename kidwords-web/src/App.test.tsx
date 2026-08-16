@@ -159,13 +159,11 @@ describe('App', () => {
     expect(screen.getByText('Try it!')).toBeInTheDocument();
   });
 
-  it('should display TipsTabs component', () => {
+  it('should display TipsTabs component collapsed by default', () => {
     renderWithChakra(<App />);
     
-    // TipsTabs should be rendered with tab labels
-    expect(screen.getByText('Teacher Tips')).toBeInTheDocument();
-    expect(screen.getByText('Parent Tips')).toBeInTheDocument();
-    expect(screen.getByText('About Levels')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Tips & help/i })).toBeInTheDocument();
+    expect(screen.queryByText('Teacher Tips')).not.toBeInTheDocument();
   });
 });
 

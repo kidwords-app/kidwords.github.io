@@ -87,7 +87,7 @@ export default function App() {
             />
 
             <WordList
-              words={categoryFiltered.slice(0, 10)}
+              words={categoryFiltered}
               selectedWord={current?.word}
               onSelectWord={(w) => setPickedWord(w.word)}
             />

@@ -17,24 +17,38 @@ describe('TipsTabs', () => {
     renderWithChakra(<TipsTabs />);
   });
 
-  it('should display all three tab labels', () => {
+  it('should start collapsed with a tips header', () => {
     renderWithChakra(<TipsTabs />);
+    expect(screen.getByRole('button', { name: /Tips & help/i })).toBeInTheDocument();
+    expect(screen.queryByText(/use gestures/i)).not.toBeInTheDocument();
+  });
+
+  it('should display all three tab labels when expanded', async () => {
+    const user = userEvent.setup();
+    renderWithChakra(<TipsTabs />);
+
+    await user.click(screen.getByRole('button', { name: /Tips & help/i }));
+
     expect(screen.getByText('Teacher Tips')).toBeInTheDocument();
     expect(screen.getByText('Parent Tips')).toBeInTheDocument();
     expect(screen.getByText('About Levels')).toBeInTheDocument();
   });
 
-  it('should display Teacher Tips content by default', () => {
+  it('should display Teacher Tips content when expanded', async () => {
+    const user = userEvent.setup();
     renderWithChakra(<TipsTabs />);
+
+    await user.click(screen.getByRole('button', { name: /Tips & help/i }));
+
     expect(screen.getByText(/use gestures/i)).toBeInTheDocument();
   });
 
   it('should switch to Parent Tips when clicked', async () => {
     const user = userEvent.setup();
     renderWithChakra(<TipsTabs />);
-    
-    const parentTab = screen.getByText('Parent Tips');
-    await user.click(parentTab);
+
+    await user.click(screen.getByRole('button', { name: /Tips & help/i }));
+    await user.click(screen.getByText('Parent Tips'));
     
     expect(screen.getByText(/show and tell/i)).toBeInTheDocument();
   });
@@ -42,9 +56,9 @@ describe('TipsTabs', () => {
   it('should switch to About Levels when clicked', async () => {
     const user = userEvent.setup();
     renderWithChakra(<TipsTabs />);
-    
-    const aboutTab = screen.getByText('About Levels');
-    await user.click(aboutTab);
+
+    await user.click(screen.getByRole('button', { name: /Tips & help/i }));
+    await user.click(screen.getByText('About Levels'));
     
     expect(screen.getByText(/explanations grow/i)).toBeInTheDocument();
   });
