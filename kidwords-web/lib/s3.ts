@@ -23,7 +23,18 @@ function getS3Client(): S3Client {
 }
 
 function defaultBucket(): string | undefined {
-  return process.env.S3_IMAGES_BUCKET?.trim() || undefined;
+  const fromName = process.env.S3_IMAGES_BUCKET?.trim();
+  if (fromName) {
+    return fromName;
+  }
+
+  const fromArn = process.env.S3_IMAGES_BUCKET_ARN?.trim();
+  if (!fromArn) {
+    return undefined;
+  }
+
+  const match = /^arn:aws:s3:::([^/*]+)/i.exec(fromArn);
+  return match?.[1];
 }
 
 function presignExpiresSeconds(): number {
@@ -113,7 +124,7 @@ export async function presignImageUrls(
       if (!ref) {
         logRds(
           "s3.presign.skip",
-          { imageS3Key: raw, reason: "unparseable (set S3_IMAGES_BUCKET for bare keys)" },
+          { imageS3Key: raw, reason: "unparseable (set S3_IMAGES_BUCKET or S3_IMAGES_BUCKET_ARN for bare keys)" },
           "error"
         );
         return;

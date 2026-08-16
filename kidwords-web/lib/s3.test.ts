@@ -4,6 +4,7 @@ import { parseS3ObjectRef } from "./s3.js";
 describe("parseS3ObjectRef", () => {
   afterEach(() => {
     delete process.env.S3_IMAGES_BUCKET;
+    delete process.env.S3_IMAGES_BUCKET_ARN;
   });
 
   it("parses s3:// URIs", () => {
@@ -33,6 +34,22 @@ describe("parseS3ObjectRef", () => {
 
   it("uses fallback bucket for bare keys", () => {
     expect(parseS3ObjectRef("words/empathy.png", "kidwords-images")).toEqual({
+      bucket: "kidwords-images",
+      key: "words/empathy.png",
+    });
+  });
+
+  it("uses S3_IMAGES_BUCKET from env for bare keys", () => {
+    process.env.S3_IMAGES_BUCKET = "kidwords-images";
+    expect(parseS3ObjectRef("words/empathy.png")).toEqual({
+      bucket: "kidwords-images",
+      key: "words/empathy.png",
+    });
+  });
+
+  it("uses S3_IMAGES_BUCKET_ARN from env for bare keys", () => {
+    process.env.S3_IMAGES_BUCKET_ARN = "arn:aws:s3:::kidwords-images";
+    expect(parseS3ObjectRef("words/empathy.png")).toEqual({
       bucket: "kidwords-images",
       key: "words/empathy.png",
     });
