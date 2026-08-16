@@ -4,9 +4,9 @@ import { WORDS, applyDbWords, type WordEntry } from "./words";
 
 export type WordsState = {
   words: WordEntry[];
-  /** True while overlaying bundled words with RDS copy from /api/words. */
+  /** True while loading RDS vocabulary and merging with the local bundle. */
   dbSyncing: boolean;
-  /** Set when the RDS overlay fails; bundled words are still shown. */
+  /** Set when the RDS fetch fails; bundled words are still shown. */
   dbError: string | null;
 };
 

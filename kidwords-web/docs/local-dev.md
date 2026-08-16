@@ -32,7 +32,7 @@ If `AWS_ROLE_ARN` is missing, enable **Development** for that var in the dashboa
 - App: http://localhost:3000  
 - API: http://localhost:3000/api/words  
 
-Bundled words load immediately. Any word+grade present in RDS replaces the bundled copy after `/api/words` succeeds. Feedback appears only for grades overlaid from RDS (`dbLevels`).
+Bundled words load immediately. After `/api/words` succeeds, RDS is primary (including DB-only words); local-only bundled words are appended. Feedback appears only for grades from RDS (`dbLevels`).
 
 ---
 

@@ -96,8 +96,8 @@ Server-only RDS/S3 code lives under `api/` and `lib/` so the Vite client bundle 
 
 In parallel with the UI plan below:
 
-- Default: bundled words in `src/core/words.ts`
-- Overlay: `GET /api/words` → per-grade merge for any matching word
+- Fallback / instant load: bundled words in `src/core/words.ts`
+- After fetch: RDS-primary list + append local-only words; per-grade fill from bundle when needed
 - Feedback and S3 images require published RDS rows
 
 Full checklist and architecture: [rds-migration.md](./rds-migration.md).

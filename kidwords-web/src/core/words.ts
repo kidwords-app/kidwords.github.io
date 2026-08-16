@@ -93,23 +93,39 @@ function mergeWordFromDb(
   return { entry, dbLevels };
 }
 
-/** Overlay RDS copy onto bundled words when the same word+level exists in the DB response. */
+function withDbLevels(fromDb: WordEntry): WordEntry {
+  const dbLevels = LEVELS.map((l) => l.id).filter((id) => levelHasDbContent(fromDb.levels[id]));
+  return { ...fromDb, dbLevels };
+}
+
+/**
+ * Prefer RDS vocabulary; fill gaps from the local bundle.
+ * - Every DB word is included (per-grade: RDS wins; missing grades use bundled copy when present).
+ * - Bundled words that are absent from RDS are appended.
+ */
 export function applyDbWords(bundled: readonly WordEntry[], fromDb: readonly WordEntry[]): WordEntry[] {
-  const dbByKey = new Map(fromDb.map((w) => [w.word.toLowerCase(), w]));
+  const bundledByKey = new Map(bundled.map((w) => [w.word.toLowerCase(), w]));
+  const seen = new Set<string>();
+  const result: WordEntry[] = [];
 
-  return bundled.map((entry) => {
-    const fromDbEntry = dbByKey.get(entry.word.toLowerCase());
-    if (!fromDbEntry) {
-      return entry;
+  for (const fromDbEntry of fromDb) {
+    const key = fromDbEntry.word.toLowerCase();
+    seen.add(key);
+    const local = bundledByKey.get(key);
+    if (local) {
+      result.push(mergeWordFromDb(local, fromDbEntry).entry);
+    } else {
+      result.push(withDbLevels(fromDbEntry));
     }
+  }
 
-    const { entry: merged, dbLevels } = mergeWordFromDb(entry, fromDbEntry);
-    if (dbLevels.length === 0) {
-      return entry;
+  for (const entry of bundled) {
+    if (!seen.has(entry.word.toLowerCase())) {
+      result.push(entry);
     }
+  }
 
-    return merged;
-  });
+  return result;
 }
 
 const WORDS_FROM_TS: WordEntry[] = [

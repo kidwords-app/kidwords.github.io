@@ -12,10 +12,11 @@ Related docs:
 
 ## Goals
 
-1. Keep the app usable if RDS or `/api/words` is down (bundled words remain the default).
-2. Overlay **any matching word+grade** from RDS onto the bundled list (no per-word client flag).
-3. Merge **per grade**: if RDS has copy for `K` but not `preK`, keep bundled `preK`.
-4. Auth to RDS with **Vercel OIDC → IAM → RDS IAM auth** (no long-lived DB passwords in the app).
+1. Prefer **RDS** as the primary vocabulary source once `/api/words` succeeds.
+2. Append **local-only** bundled words that are absent from RDS.
+3. Merge **per grade** when a word exists in both: RDS wins; missing grades keep bundled copy.
+4. Keep the app usable if RDS is down (bundled words remain the fallback).
+5. Auth to RDS with **Vercel OIDC → IAM → RDS IAM auth** (no long-lived DB passwords in the app).
 
 ---
 
@@ -24,7 +25,7 @@ Related docs:
 ```
 Browser (Vite/React)
   └─ useWords() → WORDS (bundled) + fetchWords() → GET /api/words
-                      └─ applyDbWords() overlays matching word+grade from RDS
+                      └─ applyDbWords() prefers RDS, appends local-only words
 
 Vercel serverless
   api/words.ts      → lib/wordsRepository.ts → lib/db.ts (pg + RDS Signer)
@@ -46,15 +47,15 @@ Production Node ESM requires **`.js` extensions** on relative imports under `api
 
 ---
 
-## Overlay model
+## Merge model
 
 1. Seed word+grade rows into RDS (`words` table).
-2. Client always loads bundled `WORDS` first, then calls `GET /api/words`.
-3. `applyDbWords(bundled, fromDb)` walks the **bundled** list. For each word present in the API response, any grade with a non-empty RDS `definition` replaces that grade’s bundled copy.
-4. After a successful merge, `dbLevels` lists grades that came from RDS (Feedback only shows for those grades — FK to published rows).
-5. Words that exist only in RDS (not in the bundle) are **not** added to the UI yet; extend the bundle (or merge logic) if you need RDS-only entries.
+2. Client loads bundled `WORDS` first (instant UI), then calls `GET /api/words`.
+3. `applyDbWords(bundled, fromDb)` builds the list from **RDS first** (DB order), merging per grade with any matching bundled entry.
+4. Bundled words **not** in the API response are appended.
+5. After merge, `dbLevels` lists grades that came from RDS (Feedback only shows for those grades — FK to published rows).
 
-Partial grades are intentional: missing / empty RDS definitions fall back to bundled level copy.
+Partial grades are intentional: missing / empty RDS definitions fall back to bundled level copy when the word exists locally.
 
 ---
 
@@ -64,7 +65,7 @@ Partial grades are intentional: missing / empty RDS definitions fall back to bun
 2. Rows keyed by `(word, grade)` collapse into one `WordEntry` with `levels.preK|K|G1`.
 3. Grade enum in Postgres: `preschool` / `kindergarten` / `grade1` (or legacy aliases) → app `preK` / `K` / `G1`.
 4. `image_s3_key` → short-lived HTTPS `imageUrl` on that level (see [local-dev.md](./local-dev.md)).
-5. Client `applyDbWords` overlays matching bundled words.
+5. Client `applyDbWords` prefers RDS words and appends local-only bundled entries.
 
 On API failure: UI keeps bundled words; feedback stays hidden until `dbLevels` is set.
 
@@ -97,9 +98,8 @@ Required keys are listed in [local-dev.md](./local-dev.md).
 **Publish a word grade**
 
 1. Insert `words` rows for each grade (definition, example, try_it, speak, tags, optional `image_s3_key`).
-2. Confirm `GET /api/words` includes the word.
-3. Ensure the word exists in the bundled list (otherwise it won’t appear in the UI).
-4. Verify UI copy for each grade; confirm Feedback appears only for RDS grades.
+2. Confirm `GET /api/words` includes the word — it appears in the UI even if absent from the bundle.
+3. Verify UI copy for each grade; confirm Feedback appears only for RDS grades.
 
 **Debug overlay**
 
@@ -116,7 +116,6 @@ Required keys are listed in [local-dev.md](./local-dev.md).
 
 ## Out of scope (for now)
 
-- Showing RDS-only words that are absent from the bundle
 - Removing the bundled word list entirely
 - CDN public image URLs (presigned GET is the current path)
 - Auth’d admin UI for editing copy

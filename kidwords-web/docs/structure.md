@@ -54,4 +54,4 @@ src/
 
 ## Data path (short)
 
-Bundled words in `src/core/words.ts` load first. `GET /api/words` overlays any matching word+grade from RDS. Details: [rds-migration.md](./rds-migration.md).
+Bundled words in `src/core/words.ts` load first. After `GET /api/words`, RDS is primary and local-only words are merged in. Details: [rds-migration.md](./rds-migration.md).

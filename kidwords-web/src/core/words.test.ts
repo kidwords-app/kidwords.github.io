@@ -41,19 +41,25 @@ describe('mergeWordEntries', () => {
 });
 
 describe('applyDbWords', () => {
-  it('overlays bundled words when the same word exists in db', () => {
+  it('prefers db order and appends local-only words', () => {
     const bundled: WordEntry[] = [minimalEntry('alpha'), minimalEntry('beta')];
     const fromDb: WordEntry[] = [
+      { ...minimalEntry('gamma'), syllables: 3 },
       { ...minimalEntry('alpha'), syllables: 9, cartoonId: 'from-db' },
     ];
     const merged = applyDbWords(bundled, fromDb);
-    expect(merged[0].syllables).toBe(9);
-    expect(merged[1].syllables).toBe(1);
+    expect(merged.map((w) => w.word)).toEqual(['gamma', 'alpha', 'beta']);
+    expect(merged[0].syllables).toBe(3);
+    expect(merged[0].dbLevels).toEqual(['preK', 'K', 'G1']);
+    expect(merged[1].syllables).toBe(9);
+    expect(merged[2].syllables).toBe(1);
+    expect(merged[2].dbLevels).toBeUndefined();
   });
 
-  it('keeps bundled entry when db row is missing', () => {
+  it('keeps all bundled words when db is empty', () => {
     const bundled: WordEntry[] = [{ ...minimalEntry('missing'), syllables: 2 }];
     const merged = applyDbWords(bundled, []);
+    expect(merged).toHaveLength(1);
     expect(merged[0].syllables).toBe(2);
   });
 
