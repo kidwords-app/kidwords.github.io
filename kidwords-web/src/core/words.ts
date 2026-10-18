@@ -157,33 +157,6 @@ const WORDS_FROM_TS: WordEntry[] = [
     },
   },
   {
-    word: "happy",
-    partOfSpeech: "adjective",
-    syllables: 2,
-    tags: ["feelings"],
-    cartoonId: "happy",
-    levels: {
-      preK: {
-        speak: "HAP-ee",
-        definition: "Feeling good inside.",
-        example: "I feel happy when we dance.",
-        tryIt: "Show a happy face in the mirror.",
-      },
-      K: {
-        speak: "HAP-ee",
-        definition: "A joyful feeling; the opposite of sad.",
-        example: "Sharing snacks makes us happy.",
-        tryIt: "Tell a friend what made you happy today.",
-      },
-      G1: {
-        speak: "HAP-ee",
-        definition: "Glad and cheerful.",
-        example: "I felt happy after finishing my drawing.",
-        tryIt: "Write one ‘happy’ sentence.",
-      },
-    },
-  },
-  {
     word: "rocket",
     partOfSpeech: "noun",
     syllables: 2,
@@ -261,33 +234,6 @@ const WORDS_FROM_TS: WordEntry[] = [
         definition: "Join smaller pieces to make one stronger or neater whole.",
         example: "We consolidated our notes into a clean page.",
         tryIt: "Combine two piles into one organized pile.",
-      },
-    },
-  },
-  {
-    word: "puzzle",
-    partOfSpeech: "noun",
-    syllables: 2,
-    tags: ["toys"],
-    cartoonId: "puzzle",
-    levels: {
-      preK: {
-        speak: "PUH-zuhl",
-        definition: "Pieces you fit together to make a picture.",
-        example: "We finished the cat puzzle!",
-        tryIt: "Find two pieces that match.",
-      },
-      K: {
-        speak: "PUH-zuhl",
-        definition: "A game where you join pieces to solve it.",
-        example: "The corner pieces of the puzzle are flat.",
-        tryIt: "Sort edge pieces and inside pieces.",
-      },
-      G1: {
-        speak: "PUH-zuhl",
-        definition: "Something tricky you solve by thinking or matching.",
-        example: "He solved the puzzle by the border first.",
-        tryIt: "Explain your puzzle strategy in one sentence.",
       },
     },
   },

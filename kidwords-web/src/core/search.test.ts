@@ -41,9 +41,9 @@ describe('filterWords', () => {
   });
 
   it('should filter by word name', () => {
-    const result = filterWords(TEST_WORDS, 'happy');
+    const result = filterWords(TEST_WORDS, 'dream');
     expect(result.length).toBeGreaterThan(0);
-    expect(result[0].word).toBe('happy');
+    expect(result[0].word).toBe('dream');
   });
 
   it('should filter by part of speech', () => {
@@ -59,14 +59,14 @@ describe('filterWords', () => {
   });
 
   it('should be case insensitive', () => {
-    const result1 = filterWords(TEST_WORDS, 'HAPPY');
-    const result2 = filterWords(TEST_WORDS, 'happy');
+    const result1 = filterWords(TEST_WORDS, 'DREAM');
+    const result2 = filterWords(TEST_WORDS, 'dream');
     expect(result1).toEqual(result2);
   });
 
   it('should handle partial matches', () => {
-    const result = filterWords(TEST_WORDS, 'hap');
-    expect(result.some(w => w.word === 'happy')).toBe(true);
+    const result = filterWords(TEST_WORDS, 'dre');
+    expect(result.some(w => w.word === 'dream')).toBe(true);
   });
 
   it('should return empty array for no matches', () => {
