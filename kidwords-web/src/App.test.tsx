@@ -68,15 +68,15 @@ describe('App', () => {
     renderWithChakra(<App />);
     
     const input = screen.getByPlaceholderText(/search words/i);
-    await user.type(input, 'happy');
+    await user.type(input, 'dream');
     
-    // Should show filtered words - check that happy appears (may appear multiple times)
-    const happyElements = screen.getAllByText('happy');
-    expect(happyElements.length).toBeGreaterThan(0);
-    // Verify the definition card shows the happy word's content
-    const happyWord = TEST_WORDS.find(w => w.word === 'happy');
-    if (happyWord) {
-      expect(screen.getByText(happyWord.levels.K.definition)).toBeInTheDocument();
+    // Should show filtered words - check that dream appears (may appear multiple times)
+    const dreamElements = screen.getAllByText('dream');
+    expect(dreamElements.length).toBeGreaterThan(0);
+    // Verify the definition card shows the dream word's content
+    const dreamWord = TEST_WORDS.find(w => w.word === 'dream');
+    if (dreamWord) {
+      expect(screen.getByText(dreamWord.levels.K.definition)).toBeInTheDocument();
     }
   });
 
@@ -84,8 +84,8 @@ describe('App', () => {
     const user = userEvent.setup();
     renderWithChakra(<App />);
     
-    // Find a word that's not the first one
-    const secondWord = TEST_WORDS[1];
+    // Pick a word other than the initially selected one that's on the first sidebar page
+    const secondWord = TEST_WORDS.find(w => w.word === 'dream')!;
     const wordButtons = screen.getAllByText(secondWord.word);
     // Click the first instance (in the sidebar)
     await user.click(wordButtons[0]);
