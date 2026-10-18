@@ -303,6 +303,35 @@
           "tryIt": "Why do you think wearing a helmet is a safe thing to do when riding a scooter or tricycle?"
         }
       }
+    },
+    {
+      "word": "sequence",
+      "partOfSpeech": "noun",
+      "syllables": 2,
+      "tags": [
+        "thinking"
+      ],
+      "cartoonId": "sequence",
+      "levels": {
+        "preK": {
+          "definition": "Sequence is when things happen one after another, like each step you take.",
+          "example": "Look! The child climbs the steps in a sequence to get to the slide.",
+          "tryIt": "What's the next step the child will take in their climbing sequence?",
+          "speak": "SEE-kwens"
+        },
+        "K": {
+          "definition": "A sequence is when you do things one right after the other, in order.",
+          "example": "The child is following a sequence of steps to climb the ladder up to the slide.",
+          "tryIt": "What comes next in the sequence when the child climbs the steps?",
+          "speak": "SEE-kwens"
+        },
+        "G1": {
+          "definition": "A sequence is when things happen one after another. Like when you climb steps!",
+          "example": "Climbing the steps to the slide happens in a sequence, one foot after the other.",
+          "tryIt": "What is the sequence for climbing to the top of the slide? What do you do first, then next?",
+          "speak": "SEE-kwens"
+        }
+      }
     }
   ]
 }
